@@ -1,10 +1,12 @@
 ---
 sidebar_position: 1
+description: Zustic is a lightweight, minimal state management library for React using useSyncExternalStore. Learn how to get started with Zustic.
+keywords: [React, state management, zustic, lightweight library, React hooks, redux, zustand, reduxtoolkit]
 ---
 
 # Getting Started with Zustic
 
-## Welcome to Zustic 👋
+## Welcome to Zustic
 
 Zustic is a **lightweight, minimal state management library for React** using `useSyncExternalStore`. It's perfect for managing global state in React, React Native, and Next.js applications with zero boilerplate and maximum developer experience.
 

@@ -38,6 +38,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Resources',
       items: [
+        'tutorial-extras/comparison',
         'tutorial-extras/migration-guide',
         'tutorial-extras/faq',
       ],

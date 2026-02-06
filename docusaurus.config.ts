@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Zustic',
-  tagline: 'A lightweight, minimal state management library for React',
+  title: 'Zustic - Lightweight State Management Library for React',
+  tagline: 'A lightweight, minimal state management library for React with middleware support',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -35,6 +35,73 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  // SEO and head tags
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'description',
+        content: 'Zustic - A lightweight, minimal state management library for React. Alternative to Redux, Zustand, MobX. Ultra-fast, zero dependencies, built-in middleware support.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'keywords',
+        content: 'React state management, zustic, Redux alternative, Zustand alternative, state management library, React hooks, lightweight state management, MobX alternative, useSyncExternalStore, global state management',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:title',
+        content: 'Zustic - Lightweight State Management Alternative to Redux & Zustand',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:description',
+        content: 'A lightweight, minimal state management library for React with middleware support. Smaller than Redux, Zustand, and MobX. Perfect for React, Next.js, and React Native.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:type',
+        content: 'website',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:title',
+        content: 'Zustic - Better Alternative to Redux and Zustand',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:description',
+        content: 'Ultra-lightweight state management (~500B). Redux alternative with zero dependencies and built-in middleware.',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'canonical',
+        href: 'https://zustic.github.io/',
+      },
+    },
+  ],
 
   presets: [
     [
@@ -69,6 +136,17 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexBlog: false,
+        docsRouteBasePath: '/docs',
+      },
+    ],
+  ],
+
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -87,6 +165,11 @@ const config: Config = {
           sidebarId: 'tutorialSidebar',
           position: 'left',
           label: 'Documentation',
+        },
+        {
+          type: 'search',
+          position: 'right',
+          
         },
         {
           href: 'https://www.npmjs.com/package/zustic',

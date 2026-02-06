@@ -447,8 +447,8 @@ function Counter() {
 | Learning Curve | Hard | Easy | Medium | Very Easy |
 | Boilerplate | Lots | Minimal | Medium | Minimal |
 | TypeScript | ✅ | ✅ | ✅ | ✅ |
-| DevTools | ✅ | ✅ | ✅ | ❌ |
-| Middleware | ✅ | ✅ | ❌ | ❌ |
+| DevTools | ✅ | ✅ | ✅ | ✅ |
+| Middleware | ✅ | ✅ | ❌ | ✅ |
 | Complexity | High | Low | Medium | Very Low |
 
 Choose what works best for your project!
