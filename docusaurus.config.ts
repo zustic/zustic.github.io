@@ -22,8 +22,9 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'DeveloperRejaul', // Usually your GitHub org/user name.
+  organizationName: 'zustic', // Usually your GitHub org/user name.
   projectName: 'zustic.github.io', // Usually your repo name.
+  deploymentBranch: 'main', // The branch to deploy to on GitHub Pages
 
   onBrokenLinks: 'throw',
   trailingSlash: false,
