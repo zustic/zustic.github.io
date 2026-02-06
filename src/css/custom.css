@@ -44,17 +44,17 @@ body[data-theme='dark'] {
   background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
   background-attachment: fixed;
 }
-[data-theme='dark'] .navbar {
-  background: transparent; /* semi-transparent background */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px); /* blur the background behind navbar */
-  -webkit-backdrop-filter: blur(10px); /* for Safari */
-}
-[data-theme='dark'] .navbar {
-  transition: background 0.3s ease, backdrop-filter 0.3s ease;
-}
 
 [data-theme='dark'] .footer {
   background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+@media (min-width: 997px) {
+  [data-theme='dark'] nav {
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+  }
 }
