@@ -26,7 +26,7 @@ const config: Config = {
   projectName: 'zustic.github.io', // Usually your repo name.
   deploymentBranch: 'main', // The branch to deploy to on GitHub Pages
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   trailingSlash: false,
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -120,10 +120,8 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          routeBasePath: 'blog',
+          path: './blog',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -167,9 +165,13 @@ const config: Config = {
           label: 'Documentation',
         },
         {
+          to: '/blog',
+          label: 'Blog',
+          position: 'left',
+        },
+        {
           type: 'search',
           position: 'right',
-          
         },
         {
           href: 'https://www.npmjs.com/package/zustic',

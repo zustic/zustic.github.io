@@ -1,3 +1,38 @@
+zustic:
+  label: Zustic
+  permalink: /zustic
+  description: Posts about Zustic state management library
+
+react:
+  label: React
+  permalink: /react
+  description: React and JavaScript posts
+
+middleware:
+  label: Middleware
+  permalink: /middleware
+  description: Middleware patterns and concepts
+
+state-management:
+  label: State Management
+  permalink: /state-management
+  description: State management patterns and libraries
+
+simple:
+  label: Simple
+  permalink: /simple
+  description: Simple and easy-to-understand concepts
+
+beginners:
+  label: Beginners
+  permalink: /beginners
+  description: Posts for React beginners
+
+guide:
+  label: Guide
+  permalink: /guide
+  description: Complete guides and tutorials
+
 facebook:
   label: Facebook
   permalink: /facebook
@@ -7,7 +42,6 @@ hello:
   label: Hello
   permalink: /hello
   description: Hello tag description
-
 docusaurus:
   label: Docusaurus
   permalink: /docusaurus

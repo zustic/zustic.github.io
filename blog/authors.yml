@@ -1,3 +1,12 @@
+zustic:
+  name: Zustic Team
+  title: Lightweight State Management Library
+  url: https://zustic.github.io
+  image_url: /img/logo.png
+  socials:
+    github: DeveloperRejaul
+    npm: zustic
+
 yangshun:
   name: Yangshun Tay
   title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
