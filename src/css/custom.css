@@ -50,7 +50,7 @@ body[data-theme='dark'] {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 @media (min-width: 997px) {
-  [data-theme='dark'] nav {
+  [data-theme='dark'] .navbar {
     background: rgba(0, 0, 0, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
