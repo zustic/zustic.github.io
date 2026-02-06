@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import Heading from '@theme/Heading';
 import {themes ,Highlight}from 'prism-react-renderer';
 
-
+import { useColorMode } from '@docusaurus/theme-common';
 
 export default function CounterDemo() {
   const [count, setCount] = useState(0);
@@ -11,7 +11,7 @@ export default function CounterDemo() {
   const increment = () => setCount(count + 1);
   const decrement = () => setCount(count - 1);
   const reset = () => setCount(0);
-
+  const colorMode = useColorMode()
 
 
   const code = `// store.ts
@@ -39,10 +39,9 @@ export const useCounter = create<CounterStore>((set) => ({
        <div className={styles.demoContainer}>
         {/* Prism Code */}
         <Highlight 
-        theme={themes.dracula}
+        theme={colorMode.colorMode === 'dark' ? themes.dracula : themes.github}
             code={code} 
-            language="tsx"
-
+            language="ts"
             >
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre className={`${className} ${styles.codeBlock}` } style={style}>
