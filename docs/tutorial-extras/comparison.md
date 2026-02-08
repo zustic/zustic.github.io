@@ -173,14 +173,14 @@ function App() {
 
 ## Why Choose Zustic?
 
-✅ **Smallest Size** - ~500B gzipped with zero dependencies
-✅ **Zero Learning Curve** - Master it in 5 minutes
-✅ **TypeScript Native** - Full type inference out of the box
-✅ **No Provider Hell** - No context providers needed
-✅ **Built-in Middleware** - Logger, persistence, validation, and custom middleware
-✅ **Production Ready** - Used in real applications
-✅ **Perfect for Startups** - Minimal dependencies, maximum simplicity
-✅ **React 18+ Ready** - Leverages latest React APIs
+✅ **Smallest Size** - ~500B gzipped with zero dependencies <br/>
+✅ **Zero Learning Curve** - Master it in 5 minutes <br/>
+✅ **TypeScript Native** - Full type inference out of the box <br/>
+✅ **No Provider Hell** - No context providers needed <br/>
+✅ **Built-in Middleware** - Logger, persistence, validation, and custom middleware <br/>
+✅ **Production Ready** - Used in real applications <br/>
+✅ **Perfect for Startups** - Minimal dependencies, maximum simplicity <br/>
+✅ **React 18+ Ready** - Leverages latest React APIs <br/>
 
 ## Community & Resources
 

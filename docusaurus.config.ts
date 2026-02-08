@@ -39,6 +39,13 @@ const config: Config = {
   // SEO and head tags
   headTags: [
     {
+      tagName:"meta",
+      attributes:{
+        name: 'google-site-verification',
+        content: '4zn3ZnQwL5fFC0y6PAkVudQSe7C7sf8pWM_8Qi_rDqE',
+      }
+    },
+    {
       tagName: 'meta',
       attributes: {
         name: 'description',
@@ -102,6 +109,7 @@ const config: Config = {
       },
     },
   ],
+  
 
   presets: [
     [
