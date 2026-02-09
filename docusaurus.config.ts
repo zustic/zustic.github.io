@@ -42,7 +42,7 @@ const config: Config = {
       tagName:"meta",
       attributes:{
         name: 'google-site-verification',
-        content: '4zn3ZnQwL5fFC0y6PAkVudQSe7C7sf8pWM_8Qi_rDqE',
+        content: 'Mzcsku0UjQ2GKMEB0PlZIw3nmM7_YPpPbB8FF8VmV4o',
       }
     },
     {
