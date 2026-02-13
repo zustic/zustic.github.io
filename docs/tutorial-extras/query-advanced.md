@@ -1,20 +1,22 @@
 ---
-sidebar_position: 4
-title: Advanced Features
-description: Caching strategies, optimization, and advanced patterns
+sidebar_position: 5
+title: Advanced Features & Optimization
+description: Master caching strategies, performance optimization, and advanced patterns
 ---
 
-# Advanced Features
+# Advanced Features & Optimization
 
-Master advanced patterns for caching, optimization, and performance.
+Learn advanced techniques for building performant, scalable server state management with Zustic Query.
 
-## Caching System
+## Caching Architecture
 
-Zustic Query implements a time-based caching system. Each endpoint tracks cache expiration.
+Zustic Query uses an intelligent time-based caching system where each endpoint maintains its own cache expiration timer, allowing fine-grained control over data freshness and network efficiency.
 
-### How Caching Works
+### Cache Flow & Behavior
 
-```typescript
+The caching mechanism follows a predictable lifecycle:
+
+```tsx
 const api = createApi({
   baseQuery: myBaseQuery,
   clashTimeout: 5 * 60 * 1000,  // Cache for 5 minutes
@@ -39,9 +41,11 @@ const { reFetch } = useGetUsersQuery()
 reFetch()  // Always fetches fresh
 ```
 
-### Cache Configuration
+### Cache Configuration Strategies
 
-Short cache for real-time data:
+#### Real-Time Data (Short Cache)
+
+For frequently changing data, use a short cache window:
 
 ```typescript
 const api = createApi({
@@ -55,7 +59,9 @@ const api = createApi({
 })
 ```
 
-Long cache for stable data:
+#### Stable Data (Long Cache)
+
+For reference data that rarely changes, use extended cache durations:
 
 ```typescript
 const api = createApi({
@@ -69,7 +75,9 @@ const api = createApi({
 })
 ```
 
-No cache - always fresh:
+#### Always Fresh (No Cache)
+
+For data that must always be current, disable caching entirely:
 
 ```typescript
 const api = createApi({
@@ -83,11 +91,13 @@ const api = createApi({
 })
 ```
 
-## Cache Invalidation
+## Manual Cache Invalidation
 
-Force refresh and bypass cache:
+Use `reFetch()` to bypass the cache and retrieve fresh data immediately. This is essential for operations like user-initiated refreshes or after data modifications.
 
-```typescript
+### Refresh Button Example
+
+```tsx
 export function UsersList() {
   const { data, reFetch, isLoading } = useGetUsersQuery()
 
@@ -108,11 +118,13 @@ export function UsersList() {
 }
 ```
 
-## Response Transformation
+## Data Transformation
 
-Transform API responses to app format:
+Transform API responses into application-specific formats, enabling clean separation between server contracts and application logic.
 
-```typescript
+### Response Normalization
+
+```jsx
 interface ApiUser {
   id: number
   first_name: string
@@ -154,9 +166,11 @@ export function UserDetail({ userId }: { userId: number }) {
 }
 ```
 
-## Error Handling
+## Error Handling & Recovery
 
-### Transform Errors
+Implement robust error handling with transformation and automatic retry strategies.
+
+### Error Normalization
 
 ```typescript
 endpoints: (builder) => ({
@@ -174,7 +188,9 @@ endpoints: (builder) => ({
 })
 ```
 
-### Error Recovery with Retry
+### Automatic Retry with Exponential Backoff
+
+Improve reliability by automatically retrying failed requests with progressive delays:
 
 ```typescript
 const retryMiddleware = async (ctx, next) => {
@@ -210,11 +226,13 @@ const api = createApi({
 })
 ```
 
-## Dependent Queries
+## Sequential Data Dependencies
 
-Wait for one query before fetching another:
+Implement dependent query patterns where subsequent requests only execute after prerequisite data is loaded, preventing unnecessary network overhead.
 
-```typescript
+### Multi-Step Data Loading
+
+```jsx
 export function UserPosts({ userId }: { userId: number }) {
   // First query: fetch user
   const { data: user } = useGetUserQuery(userId)
@@ -235,9 +253,13 @@ export function UserPosts({ userId }: { userId: number }) {
 }
 ```
 
-## Polling for Real-Time Data
+## Real-Time Data Updates
 
-```typescript
+Implement polling patterns for data that requires frequent refresh cycles, such as live statistics or status feeds.
+
+### Polling Implementation
+
+```jsx
 import { useEffect } from 'react'
 
 export function LiveStats() {
@@ -256,11 +278,12 @@ export function LiveStats() {
 }
 ```
 
-## Batch Requests
+## Optimized Network Requests
 
-Reduce network requests by batching:
+Reduce network overhead and improve performance by batching multiple individual requests into single batch operations.
 
-```typescript
+### Batching Multiple Resources
+```jsx
 // Problem: Multiple individual requests
 export function Users() {
   const { data: user1 } = useGetUserQuery(1)
@@ -289,9 +312,12 @@ export function Users() {
 }
 ```
 
-## Memoization
+## Computational Memoization
 
-```typescript
+Cache expensive computations to prevent redundant calculations across re-renders, improving application responsiveness and memory efficiency.
+
+### Memoizing Derived State
+```jsx
 import { useMemo } from 'react'
 
 export function UsersList() {
@@ -314,9 +340,12 @@ export function UsersList() {
 }
 ```
 
-## Selective Queries
+## Conditional Query Execution
 
-```typescript
+Control which queries execute based on runtime conditions, permissions, or feature flags, optimizing resource usage and enabling progressive feature rollout.
+
+### Permission & Feature-Based Loading
+```tsx
 export function Dashboard() {
   // Only fetch if admin
   const isAdmin = useIsAdmin()
@@ -340,9 +369,11 @@ export function Dashboard() {
 }
 ```
 
-## Best Practices
+## Best Practices & Anti-Patterns
 
-### ✅ DO
+Follow these patterns to build robust, performant applications.
+
+### ✅ Recommended Patterns
 
 - Use `skip` option for conditional queries
 - Call `reFetch()` to manually refetch when needed
@@ -350,7 +381,7 @@ export function Dashboard() {
 - Use appropriate `clashTimeout` values
 - Handle errors in component UI
 
-### ❌ DON'T
+### ❌ Anti-Patterns to Avoid
 
 - Don't call hooks conditionally (use `skip` instead)
 - Don't create API instances inside components
@@ -358,11 +389,13 @@ export function Dashboard() {
 - Don't pass `undefined` as query arguments
 - Don't ignore error states in UI
 
-## TypeScript Support
+## TypeScript Integration
 
-Full type inference with generics:
+Zustic Query provides full type inference through generics, enabling compile-time safety and superior IDE support.
 
-```typescript
+### Type-Safe Query Definitions
+
+```tsx
 interface User {
   id: number
   name: string

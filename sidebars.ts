@@ -40,7 +40,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'tutorial-extras/query-overview',
         'tutorial-extras/query-getting-started',
-        'tutorial-extras/query-plugins-middleware',
+        'tutorial-extras/query-middleware',
+        'tutorial-extras/query-plugins',
         'tutorial-extras/query-advanced',
       ],
     },

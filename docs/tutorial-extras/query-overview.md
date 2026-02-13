@@ -1,27 +1,27 @@
 ---
 sidebar_position: 1
 title: Query API Overview
-description: Lightweight server state management for Zustic
+description: Lightweight server state management built on Zustic Core
 ---
 
 # Query API Overview
 
-Zustic Query is a lightweight server state management library built on Zustic Core. It manages server state with automatic caching, middleware support, and plugin hooks.
+Zustic Query is a minimal yet powerful server state management library. Built on top of Zustic Core, it provides automatic caching, middleware pipelines, and plugin hooks for complete control over your data-fetching layer.
 
-## Core Architecture
+## Core Concepts
 
-Based on your implementation:
+### Main Building Blocks
 
-- **`createApi`**: Main factory function that creates your API instance
-- **`baseQuery`**: Custom async function that handles all network requests
-- **`endpoints`**: Builder pattern for defining queries and mutations
-- **`clashTimeout`**: Cache expiration time in milliseconds (default: 30 seconds)
-- **Middleware**: Pipeline for request/response transformation
-- **Plugins**: Lifecycle hooks (beforeQuery, afterQuery, onError)
+- **`createApi`** — Factory function that creates your API configuration with endpoints and middleware
+- **`baseQuery`** — Custom async handler for all HTTP requests (fetch, axios, etc.)
+- **`endpoints`** — Builder pattern for declaring query and mutation operations
+- **`clashTimeout`** — Cache expiration window in milliseconds (default: 30 seconds)
+- **Middleware** — Request/response transformation pipeline executed sequentially
+- **Plugins** — Lifecycle hooks (beforeQuery, afterQuery, onError) for side effects
 
-## How It Works
-
-```typescript
+## Basic Example
+```tsx
+Here's how the pieces fit together:
 import { createApi } from 'zustic/query'
 
 const api = createApi({
@@ -54,37 +54,70 @@ const api = createApi({
 export const { useGetUsersQuery, useCreateUserMutation } = api
 ```
 
-## Key Features
+---
 
-- **Auto-Generated Hooks**: Queries become `use{Name}Query`, mutations become `use{Name}Mutation`
-- **Smart Caching**: Check cache before network request, use `reFetch()` to bypass
-- **Middleware**: Transform requests/responses in pipeline
-- **Plugins**: Hook into query lifecycle events
-- **Type-Safe**: Full TypeScript support with generics
-- **State Management**: Tracks loading, error, success states
+## How It Works
 
-## Caching Flow
+Zustic Query follows a declarative pattern where you define your API once, and everything else is generated:
 
-1. **First Call**: Executes baseQuery, stores data in cache with expiration
-2. **Cached Calls**: Returns cached data instantly if not expired
-3. **Expired Cache**: Fetches fresh data when cache expires
-4. **Manual Refetch**: Call `reFetch()` to bypass cache immediately
+1. **Configuration** — Define `baseQuery`, `clashTimeout`, and `endpoints`
+2. **Auto-Generation** — Hooks are automatically created from endpoints
+3. **Execution** — Hooks manage state, caching, and request lifecycle
+4. **Flexibility** — Middleware and plugins customize behavior globally or per-endpoint
 
+---
 
-# Real-World Comparison
+## Key Capabilities
 
-Below is a practical comparison with major server-state libraries.
+- **🎣 Auto-Generated Hooks** — Queries become `use{Name}Query`, mutations become `use{Name}Mutation`
+- **🚀 Intelligent Caching** — Automatic request deduplication with time-based expiration
+- **⚙️ Middleware Pipeline** — Global or endpoint-specific request/response transformation
+- **🔌 Plugin System** — Lifecycle hooks for logging, analytics, error recovery
+- **🛡️ Type-Safe** — Full TypeScript support with complete type inference
+- **📊 State Tracking** — Built-in `isLoading`, `isError`, `isSuccess` states
+
+---
+
+## Cache Lifecycle
+
+Zustic Query's caching system optimizes performance by reducing redundant requests:
+
+**Stage 1 — First Request**
+- Executes `baseQuery` function
+- Stores result with expiration timer
+- Returns data to component
+
+**Stage 2 — Subsequent Requests**
+- Checks if cache exists and hasn't expired
+- Returns cached data instantly (zero network latency)
+- No `baseQuery` execution
+
+**Stage 3 — Expired Cache**
+- Automatically fetches fresh data when timeout expires
+- Updates cache with new response
+- Triggers component re-render
+
+**Stage 4 — Manual Refetch**
+- Calling `reFetch()` skips cache entirely
+- Immediately executes `baseQuery`
+- Always returns fresh data
+
+---
+
+## Comparison with Alternatives
 
 | Feature | Zustic Query | TanStack Query | RTK Query | SWR | Apollo Client |
-|----------|---------------|----------------|------------|------|----------------|
-| Bundle Size | 🟢 Very Small | 🟡 Medium | 🟡 Medium | 🟢 Small | 🔴 Large |
-| Custom Fetch Control | 🟢 Full Control | 🟡 Abstracted | 🟡 Redux-based | 🟡 Limited | 🔴 GraphQL-only |
-| Auto Hook Generation | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🔴 No | 🟢 Yes |
-| Built-in Cache | 🟢 Yes | 🟢 Advanced | 🟢 Advanced | 🟢 Yes | 🟢 Advanced |
-| Middleware System | 🟢 Yes | 🔴 No | 🟢 Yes | 🔴 No | 🟡 Links |
-| Plugin Lifecycle | 🟢 Yes | 🔴 No | 🔴 No | 🔴 No | 🟡 Limited |
-| Global Interceptors | 🟢 Yes | 🟡 Via QueryClient | 🟢 Yes | 🔴 No | 🟢 Yes |
-| Redux Required | ❌ No | ❌ No | 🟢 Yes | ❌ No | ❌ No |
-| GraphQL Support | 🟡 Manual | 🟡 Manual | 🟡 Manual | 🟡 Manual | 🟢 Native |
-| Learning Curve | 🟢 Low | 🟡 Medium | 🔴 High | 🟢 Low | 🔴 High |
+|:--------|:------:|:------:|:------:|:------:|:------:|
+| **Bundle Size** | 🟢 Tiny | 🟡 Medium | 🟡 Large | 🟢 Small | 🔴 Very Large |
+| **Custom Fetch** | 🟢 Full | 🟡 Limited | 🟡 Redux | 🟡 Hooks | 🔴 GraphQL |
+| **Auto Hooks** | 🟢 Yes | 🟢 Yes | 🟢 Yes | ❌ No | 🟢 Yes |
+| **Middleware** | 🟢 Yes | ❌ No | 🟢 Yes | ❌ No | 🟡 Links |
+| **Plugins** | 🟢 Yes | ❌ No | ❌ No | ❌ No | 🟡 Limited |
+| **Learning Curve** | 🟢 Low | � Medium | 🔴 High | 🟢 Low | 🔴 High |
+| **TypeScript** | � Excellent | � Excellent | � Good | 🟡 Fair | � Fair |
+| **Zero Config** | 🟢 Yes | ❌ No | ❌ No | 🟢 Yes | ❌ No |
+
+---
+
+## Next Steps
 

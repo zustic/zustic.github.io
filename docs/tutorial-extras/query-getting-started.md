@@ -1,40 +1,45 @@
 ---
 sidebar_position: 2
 title: Getting Started
-description: Step-by-step guide to set up Zustic Query in your React app
+description: Build your first data-fetching layer with Zustic Query
 ---
 
 # Getting Started with Zustic Query
 
-Zustic Query is a lightweight data-fetching abstraction built on top of Zustand.  
-It supports:
+Set up Zustic Query in minutes and start building robust server state management. This guide walks through installing, configuring, and using the Query API in your React application.
 
-- Queries & Mutations
-- Caching
-- Refetching
-- Middleware
-- Plugins
-- Transform hooks
+## Features Overview
+
+Zustic Query provides everything needed for modern data fetching:
+
+- **Queries & Mutations** — Read and write operations with built-in state management
+- **Intelligent Caching** — Automatic cache management with configurable expiration
+- **Manual Refetching** — Force fresh data when needed
+- **Middleware Pipeline** — Intercept and transform requests/responses
+- **Plugin System** — Extend functionality with lifecycle hooks
+- **Response Transformation** — Normalize API responses to app formats
 
 ---
 
 ## Installation
 
+Install the Zustic package:
+
 ```bash
 npm install zustic
-````
+```
 
-Import from the query subpath:
+Import the API factory from the query submodule:
 
-```ts
-import { createApi } from "zustic/query";
+```typescript
+import { createApi } from 'zustic/query'
 ```
 
 ---
 
-# Step 1: Create Your API
+## Step 1: Define Your API Configuration
 
-Create `src/api.ts`:
+Create `src/api.ts` to centralize your server state management:
 
 ```ts
 import { createApi } from "zustic/query";
@@ -110,9 +115,11 @@ export const {
 
 ---
 
-# Step 2: Using Query Hooks
+## Step 2: Using Query Hooks
 
-Query hooks automatically execute on mount (unless skipped).
+Query hooks automatically fetch data when components mount (unless explicitly skipped). Auto-generated hook names follow the pattern `use{EndpointName}Query`.
+
+### Fetching List Data
 
 ```tsx
 import { useGetUsersQuery } from "./api";
@@ -150,7 +157,9 @@ export function UsersList() {
 
 ## Query Hook Return Values
 
-```ts
+Every query hook returns a state object with the following properties:
+
+```typescript
 const {
   data,
   isLoading,
@@ -158,39 +167,46 @@ const {
   isSuccess,
   error,
   reFetch,
-} = useGetUsersQuery(arg, options);
+} = useGetUsersQuery(arg, options)
 ```
 
-| Field       | Description               |
-| ----------- | ------------------------- |
-| `data`      | Returned data             |
-| `isLoading` | True during first request |
-| `isError`   | True if request failed    |
-| `isSuccess` | True if request succeeded |
-| `error`     | Error value               |
-| `reFetch`   | Manually trigger refetch  |
+| Property    | Type      | Description                              |
+| ----------- | --------- | ---------------------------------------- |
+| `data`      | `T`       | The resolved response data               |
+| `isLoading` | `boolean` | True during the initial request          |
+| `isError`   | `boolean` | True if the request failed               |
+| `isSuccess` | `boolean` | True if the request completed            |
+| `error`     | `string?` | Error message if request failed          |
+| `reFetch`   | `() => void` | Function to manually trigger fresh data |
 
 ---
 
-## Conditional Queries (skip)
+## Conditional Queries
+
+Use the `skip` option to prevent queries from executing until specific conditions are met.
+
+### Skip Until Data Available
 
 ```tsx
 export function UserProfile({ userId }: { userId?: number }) {
+  // Query only executes if userId is defined
   const { data } = useGetUserQuery(userId, {
     skip: !userId,
-  });
+  })
 
-  if (!userId) return <div>Select a user</div>;
+  if (!userId) return <div>Select a user first</div>
 
-  return <div>{data?.name}</div>;
+  return <div>{data?.name}</div>
 }
 ```
 
 ---
 
-# Step 3: Using Mutation Hooks
+## Step 3: Using Mutation Hooks
 
-Mutations are manually triggered.
+Mutations represent write operations (POST, PUT, DELETE) that are manually triggered on demand.
+
+### Creating Resources
 
 ```tsx
 import { useCreateUserMutation } from "./api";
@@ -235,13 +251,9 @@ export function CreateUserForm() {
 
 ## Mutation Hook Return Values
 
-```ts
-const [execute, state] = useCreateUserMutation();
-```
+Mutation hooks return a tuple with the execution function and state object:
 
-Where `state` contains:
-
-```ts
+```typescript
 {
   data,
   isLoading,
@@ -251,67 +263,93 @@ Where `state` contains:
 }
 ```
 
-Execute mutation:
+Mutation execution:
 
-```ts
-await execute(payload);
+```typescript
+// Call with payload
+const result = await execute(payload)
+
+// Handle result
+if (result.error) {
+  console.error('Operation failed:', result.error)
+} else {
+  console.log('Success:', result.data)
+}
 ```
 
 ---
 
-# Refetching Data
+## Manual Refetching
+
+Force queries to fetch fresh data by calling `reFetch()`:
 
 ```tsx
-const { reFetch } = useGetUsersQuery();
+export function UsersList() {
+  const { data, reFetch } = useGetUsersQuery()
 
-<button onClick={() => reFetch()}>
-  Refresh
-</button>
+  return (
+    <div>
+      <button onClick={() => reFetch()}>
+        🔄 Refresh Data
+      </button>
+      {/* Display users */}
+    </div>
+  )
+}
 ```
 
 ---
 
-# Caching
+## Automatic Caching
 
-Zustic Query automatically caches results.
+Zustic Query automatically manages data freshness through intelligent caching:
 
-Cache duration is controlled by:
-
-```ts
-clashTimeout: 60 * 1000
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  clashTimeout: 60 * 1000,  // Cache for 60 seconds
+  endpoints: (builder) => (/* ... */)
+})
 ```
 
-* Cached data is reused if arguments match
-* `reFetch()` forces bypassing cache
+**Cache Behavior:**
+- ✅ Cached data reused if arguments match and cache hasn't expired
+- ✅ `reFetch()` always fetches fresh regardless of cache
+- ✅ Different arguments trigger separate cache entries
 
 ---
 
-# Transform & Lifecycle Hooks
+## Advanced Endpoint Configuration
 
-Endpoints support advanced features:
+Endpoints support lifecycle hooks and transformation functions for advanced scenarios:
 
-```ts
+```typescript
 builder.query({
-  query: () => ({ url: "/users" }),
+  query: () => ({ url: '/users' }),
 
-  transformResponse: (data, prev) => {
-    return data;
+  // Transform successful responses
+  transformResponse: (data, meta) => {
+    return data
   },
 
-  transformError: (error) => {
-    return error;
+  // Transform error messages
+  transformError: (error, meta) => {
+    return error
   },
 
+  // React to successful operations
   onSuccess: async (data) => {
-    console.log("Success:", data);
+    console.log('Success:', data)
   },
 
+  // React to failures
   onError: async (error) => {
-    console.error("Error:", error);
+    console.error('Error:', error)
   },
+
   middlewares: [],
   plugins: [],
-});
+})
 ```
 
 ---
