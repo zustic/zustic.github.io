@@ -36,6 +36,16 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Query API',
+      items: [
+        'tutorial-extras/query-overview',
+        'tutorial-extras/query-getting-started',
+        'tutorial-extras/query-plugins-middleware',
+        'tutorial-extras/query-advanced',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Resources',
       items: [
         'tutorial-extras/comparison',
