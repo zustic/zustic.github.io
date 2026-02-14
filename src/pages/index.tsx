@@ -23,12 +23,12 @@ function HomepageHeader() {
             <Link
               className={clsx('button', styles.buttonPrimary)}
               to="/docs/intro">
-              Get Started - 5 min ⏱️
+              Get Started
             </Link>
             <Link
               className={clsx('button', styles.buttonSecondary)}
               to="https://github.com/DeveloperRejaul/zustic">
-              View on GitHub 🔗
+              View on GitHub
             </Link>
           </div>
           <div className={styles.stats}>

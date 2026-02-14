@@ -412,10 +412,10 @@ const count = useCounterStore((state) => state.count);
 Only subscribe to the state you need:
 
 ```typescript
-// ✅ Good - only subscribes to count
+//  Good - only subscribes to count
 const count = useStore((state) => state.count);
 
-// ❌ Unnecessary - subscribes to entire store
+//  Unnecessary - subscribes to entire store
 const { count } = useStore();
 ```
 
@@ -437,12 +437,12 @@ const Counter = memo(function Counter() {
 For large applications, split state into multiple stores:
 
 ```typescript
-// ✅ Good - separate concerns
+//  Good - separate concerns
 const useUserStore = create((set) => ({...}));
 const useCartStore = create((set) => ({...}));
 const useUIStore = create((set) => ({...}));
 
-// ❌ Bad - everything in one store
+//  Bad - everything in one store
 const useAppStore = create((set) => ({...})); // Too much state
 ```
 
@@ -514,10 +514,10 @@ const useFormStore = create((set) => ({
 Make sure you're using the `set` function correctly:
 
 ```typescript
-// ❌ Wrong - missing set
+//  Wrong - missing set
 const increment = () => ({ count: state.count + 1 });
 
-// ✅ Correct
+//  Correct
 const increment = () => set((state) => ({ count: state.count + 1 }));
 ```
 
@@ -526,12 +526,12 @@ const increment = () => set((state) => ({ count: state.count + 1 }));
 Ensure you're using the hook at the top level:
 
 ```typescript
-// ❌ Wrong - hook called conditionally
+//  Wrong - hook called conditionally
 if (condition) {
   const count = useStore((state) => state.count);
 }
 
-// ✅ Correct - hook at top level
+//  Correct - hook at top level
 const count = useStore((state) => state.count);
 if (condition) {
   // Use count here

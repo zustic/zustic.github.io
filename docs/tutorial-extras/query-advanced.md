@@ -19,7 +19,7 @@ The caching mechanism follows a predictable lifecycle:
 ```tsx
 const api = createApi({
   baseQuery: myBaseQuery,
-  clashTimeout: 5 * 60 * 1000,  // Cache for 5 minutes
+  cacheTimeout: 5 * 60 * 1000,  // Cache for 5 minutes
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => ({ url: '/users' })
@@ -50,7 +50,7 @@ For frequently changing data, use a short cache window:
 ```typescript
 const api = createApi({
   baseQuery: myBaseQuery,
-  clashTimeout: 1 * 60 * 1000,  // 1 minute
+  cacheTimeout: 1 * 60 * 1000,  // 1 minute
   endpoints: (builder) => ({
     getLiveStats: builder.query({
       query: () => ({ url: '/stats' })
@@ -66,7 +66,7 @@ For reference data that rarely changes, use extended cache durations:
 ```typescript
 const api = createApi({
   baseQuery: myBaseQuery,
-  clashTimeout: 30 * 60 * 1000,  // 30 minutes
+  cacheTimeout: 30 * 60 * 1000,  // 30 minutes
   endpoints: (builder) => ({
     getCountries: builder.query({
       query: () => ({ url: '/countries' })
@@ -82,7 +82,7 @@ For data that must always be current, disable caching entirely:
 ```typescript
 const api = createApi({
   baseQuery: myBaseQuery,
-  clashTimeout: 0,  // Disable cache
+  cacheTimeout: 0,  // Disable cache
   endpoints: (builder) => ({
     getRandomNumber: builder.query({
       query: () => ({ url: '/random' })
@@ -108,7 +108,7 @@ export function UsersList() {
   return (
     <div>
       <button onClick={handleRefresh} disabled={isLoading}>
-        {isLoading ? 'Refreshing...' : '🔄 Refresh'}
+        {isLoading ? 'Refreshing...' : ' Refresh'}
       </button>
       <ul>
         {data?.map(user => <li key={user.id}>{user.name}</li>)}
@@ -373,15 +373,15 @@ export function Dashboard() {
 
 Follow these patterns to build robust, performant applications.
 
-### ✅ Recommended Patterns
+###  Recommended Patterns
 
 - Use `skip` option for conditional queries
 - Call `reFetch()` to manually refetch when needed
 - Transform responses for your app's data format
-- Use appropriate `clashTimeout` values
+- Use appropriate `cacheTimeout` values
 - Handle errors in component UI
 
-### ❌ Anti-Patterns to Avoid
+###  Anti-Patterns to Avoid
 
 - Don't call hooks conditionally (use `skip` instead)
 - Don't create API instances inside components

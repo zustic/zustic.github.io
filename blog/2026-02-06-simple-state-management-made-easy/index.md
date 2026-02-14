@@ -345,12 +345,12 @@ function LoginForm() {
 
 ## Key Takeaways
 
-✅ **Simple to understand** - Just JavaScript functions
-✅ **No boilerplate** - No actions, reducers, or providers
-✅ **TypeScript friendly** - Full type inference
-✅ **Flexible** - Works with async, nested state, arrays
-✅ **Fast** - Only re-renders when subscribed state changes
-✅ **Powerful** - Add middleware for logging, persistence, validation
+ **Simple to understand** - Just JavaScript functions
+ **No boilerplate** - No actions, reducers, or providers
+ **TypeScript friendly** - Full type inference
+ **Flexible** - Works with async, nested state, arrays
+ **Fast** - Only re-renders when subscribed state changes
+ **Powerful** - Add middleware for logging, persistence, validation
 
 ## State Management Decision Tree
 
@@ -373,10 +373,10 @@ Do you need enterprise features?
 State management should be simple. Zustic proves that you don't need complexity to have powerful, scalable state management. In fact, **simple is better**.
 
 Start with Zustic today and enjoy:
-- ✅ 5-minute learning curve
-- ✅ Zero dependencies
-- ✅ ~500B bundle size
-- ✅ Perfect for teams
+-  5-minute learning curve
+-  Zero dependencies
+-  ~500B bundle size
+-  Perfect for teams
 
 Get started: [Zustic Installation](/docs/tutorial-basics/installation)
 

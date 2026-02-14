@@ -76,10 +76,10 @@ function Counter() {
 
 ### Benefits
 
-- ✅ No provider wrapper needed
-- ✅ No context drilling
-- ✅ Simpler code
-- ✅ Better performance (no unnecessary re-renders)
+-  No provider wrapper needed
+-  No context drilling
+-  Simpler code
+-  Better performance (no unnecessary re-renders)
 
 ## From Redux
 
@@ -182,10 +182,10 @@ function Counter() {
 
 ### Benefits
 
-- ✅ Much less boilerplate
-- ✅ Easier to learn
-- ✅ Faster to implement
-- ✅ Smaller bundle size
+-  Much less boilerplate
+-  Easier to learn
+-  Faster to implement
+-  Smaller bundle size
 
 ## From Zustand
 
@@ -300,10 +300,10 @@ function Counter() {
 
 ### Benefits
 
-- ✅ No class-based approach
-- ✅ No decorators needed
-- ✅ Simpler syntax
-- ✅ Better TypeScript support
+-  No class-based approach
+-  No decorators needed
+-  Simpler syntax
+-  Better TypeScript support
 
 ## Migration Checklist
 
@@ -441,14 +441,14 @@ function Counter() {
 
 ## Comparison Table
 
-| Aspect | Redux | Zustand | MobX | Zustic |
-|--------|-------|---------|------|--------|
-| Bundle Size | 7KB | 2KB | 13KB | ~500B |
-| Learning Curve | Hard | Easy | Medium | Very Easy |
-| Boilerplate | Lots | Minimal | Medium | Minimal |
-| TypeScript | ✅ | ✅ | ✅ | ✅ |
-| DevTools | ✅ | ✅ | ✅ | ✅ |
-| Middleware | ✅ | ✅ | ❌ | ✅ |
-| Complexity | High | Low | Medium | Very Low |
+| Aspect            | Redux | Zustand | MobX | Zustic |
+|-------------------|--------|----------|-------|---------|
+| Bundle Size       | ~7KB   | ~2KB     | ~13KB | ~0.5KB |
+| Learning Curve    | Hard   | Easy     | Medium | Very Easy |
+| Boilerplate       | High   | Minimal  | Medium | Minimal |
+| TypeScript        | Excellent | Good | Good | Good |
+| DevTools          | Built-in (Redux DevTools) | Via middleware | Via mobx-devtools | Basic / Optional |
+| Middleware        | Strong ecosystem | Built-in support | Limited | Minimal |
+| Complexity        | High   | Low      | Medium | Very Low |
 
-Choose what works best for your project!
+Choose what works best for your project.

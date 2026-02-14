@@ -68,7 +68,7 @@ export const useCounter = create<CounterStore>((set) => ({
             ➖ Decrease
             </button>
             <button className={`${styles.btn} ${styles.btnReset}`} onClick={reset}>
-            🔄 Reset
+             Reset
             </button>
             <button className={`${styles.btn} ${styles.btnIncrement}`} onClick={increment}>
             ➕ Increase
@@ -182,11 +182,11 @@ export const useCounter = create<CounterStore>((set) => ({
                 Middleware
                 </div>
                 <div className={styles.best} data-label="Zustic">
-                ✅ Built-in
+                 Built-in
                 </div>
-                <div data-label="Redux">✅ Required</div>
-                <div data-label="Zustand">✅ Optional</div>
-                <div data-label="Context API">❌ No</div>
+                <div data-label="Redux"> Required</div>
+                <div data-label="Zustand"> Optional</div>
+                <div data-label="Context API"> No</div>
             </div>
 
             {/* Row 5 */}
@@ -195,11 +195,11 @@ export const useCounter = create<CounterStore>((set) => ({
                 TypeScript
                 </div>
                 <div className={styles.best} data-label="Zustic">
-                ✅ Excellent
+                 Excellent
                 </div>
-                <div data-label="Redux">✅ Good</div>
-                <div data-label="Zustand">✅ Good</div>
-                <div data-label="Context API">✅ Good</div>
+                <div data-label="Redux"> Good</div>
+                <div data-label="Zustand"> Good</div>
+                <div data-label="Context API"> Good</div>
             </div>
         </div>
         </div>

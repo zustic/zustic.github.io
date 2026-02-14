@@ -193,10 +193,10 @@ export default function App() {
 Make sure you're importing from the correct package:
 
 ```typescript
-// ✅ Correct
+// Correct
 import { create } from 'zustic';
 
-// ❌ Wrong
+// Wrong
 import { create } from 'zustand'; // Different package!
 ```
 

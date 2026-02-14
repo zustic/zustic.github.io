@@ -522,7 +522,7 @@ const loggerMiddleware = (set, get) => (next) => async (partial) => {
   const prevState = get();
   const timestamp = Date.now();
 
-  console.log('🔵 Action:',
+  console.log(' Action:',
     typeof partial === 'function' ? 'function' : Object.keys(partial)
   );
   console.log('📊 Previous state:', prevState);
@@ -530,7 +530,7 @@ const loggerMiddleware = (set, get) => (next) => async (partial) => {
   await next(partial);
 
   const nextState = get();
-  console.log('✅ Updated state:', nextState);
+  console.log(' Updated state:', nextState);
   console.log('⏱️ Time:', new Date(timestamp).toISOString());
   console.log('---');
 };
@@ -591,18 +591,18 @@ const validateMiddleware = (set, get) => (next) => async (partial) => {
 
   // Validate updates
   if ('age' in updates && updates.age < 0) {
-    console.warn('❌ Age cannot be negative');
+    console.warn(' Age cannot be negative');
     return;
   }
 
   if ('email' in updates && !updates.email.includes('@')) {
-    console.warn('❌ Invalid email format');
+    console.warn(' Invalid email format');
     return;
   }
 
   // Valid, proceed with update
   await next(partial);
-  console.log('✅ Validation passed');
+  console.log(' Validation passed');
 };
 
 const useUserStore = create(
@@ -616,9 +616,9 @@ const useUserStore = create(
 );
 
 // Usage:
-// useUserStore.setAge(-5); // ❌ Blocked
-// useUserStore.setEmail('invalid'); // ❌ Blocked
-// useUserStore.setAge(30); // ✅ Allowed
+// useUserStore.setAge(-5); //  Blocked
+// useUserStore.setEmail('invalid'); //  Blocked
+// useUserStore.setAge(30); //  Allowed
 ```
 
 ## 11. Combining Multiple Middleware

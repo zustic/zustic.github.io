@@ -224,7 +224,7 @@ const { count, inc } = useCounter();
 
 ## State Best Practices
 
-### ✅ Keep State Flat
+### Keep State Flat
 
 ```typescript
 // Good - flat structure
@@ -235,7 +235,7 @@ const useStore = create((set) => ({
 }));
 ```
 
-### ❌ Avoid Deep Nesting
+### Avoid Deep Nesting
 
 ```typescript
 // Bad - deeply nested
@@ -250,7 +250,7 @@ const useStore = create((set) => ({
 }));
 ```
 
-### ✅ Use Immutable Updates
+### Use Immutable Updates
 
 ```typescript
 // Good - creates new array

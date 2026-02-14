@@ -34,12 +34,12 @@ type MiddlewareContext = {
 
 ```typescript
 const logMiddleware: ApiMiddleware = async (ctx, next) => {
-  console.log('📤 Request:', ctx.arg)
+  console.log('Request:', ctx.arg)
   const start = Date.now()
 
   const result = await next()
 
-  console.log('📥 Response time:', Date.now() - start, 'ms')
+  console.log('Response time:', Date.now() - start, 'ms')
   return result
 }
 
@@ -260,7 +260,7 @@ const rateLimitMiddleware: ApiMiddleware = (() => {
     if (windowElapsed > WINDOW_SIZE) {
       requestCount = 0
       windowStart = now
-      console.log('🔄 Rate limit window reset')
+      console.log(' Rate limit window reset')
     }
 
     // Check if at limit
@@ -509,7 +509,7 @@ export const api = createApi({
     }
   },
 
-  clashTimeout: 5 * 60 * 1000,
+  cacheTimeout: 5 * 60 * 1000,
   
   middlewares: [
     authMiddleware,
@@ -580,7 +580,7 @@ export function UserManagement() {
     })
 
     if (!result.error) {
-      console.log('✅ User created:', result.data)
+      console.log(' User created:', result.data)
     }
   }
 
@@ -612,7 +612,7 @@ export function UserManagement() {
 
 ## Best Practices
 
-### ✅ Do's
+###  Do's
 
 - **Order matters** — Put auth first, retry last
 - **Always call next()** — Unless you want to short-circuit
@@ -621,7 +621,7 @@ export function UserManagement() {
 - **Log for debugging** — Include meaningful messages
 - **Test in isolation** — Test each middleware independently
 
-### ❌ Don'ts
+###  Don'ts
 
 - **Don't forget to return** — Always return the result
 - **Don't block indefinitely** — Use timeouts

@@ -60,19 +60,19 @@ const helloPlugin: ApiPlugin = {
   name: 'hello',
 
   onInit: (api) => {
-    console.log('✅ Hello plugin initialized')
+    console.log(' Hello plugin initialized')
   },
 
   beforeQuery: (ctx) => {
-    console.log('🔵 Query starting:', ctx.def.endpoint)
+    console.log(' Query starting:', ctx.def.endpoint)
   },
 
   afterQuery: (result, ctx) => {
-    console.log('🟢 Query completed:', ctx.def.endpoint)
+    console.log(' Query completed:', ctx.def.endpoint)
   },
 
   onError: (error, ctx) => {
-    console.error('🔴 Query error:', ctx.def.endpoint, error)
+    console.error(' Query error:', ctx.def.endpoint, error)
   },
 }
 
@@ -259,7 +259,7 @@ const persistencePlugin: ApiPlugin = {
           const cached = JSON.parse(localStorage.getItem(key)!)
           const endpoint = key.replace('query_', '')
           console.log(
-            `✅ Restored ${endpoint} from localStorage`,
+            ` Restored ${endpoint} from localStorage`,
             cached.data
           )
         } catch (e) {
@@ -574,7 +574,7 @@ export const api = createApi({
     }
   },
 
-  clashTimeout: 5 * 60 * 1000,
+  cacheTimeout: 5 * 60 * 1000,
 
   plugins: [loggingPlugin, analyticsPlugin, sentryPlugin],
 
@@ -625,7 +625,7 @@ export function App() {
 
 ## Best Practices
 
-### ✅ Do's
+###  Do's
 
 - **Keep plugins focused** — One concern per plugin
 - **Use for side effects** — Logging, analytics, tracking
@@ -634,7 +634,7 @@ export function App() {
 - **Document plugin behavior** — Explain what it does
 - **Test plugins independently** — Test each plugin separately
 
-### ❌ Don'ts
+###  Don'ts
 
 - **Don't modify core logic** — Use for side effects only
 - **Don't throw errors** — Always handle gracefully

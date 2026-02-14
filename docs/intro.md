@@ -10,24 +10,24 @@ keywords: [React, state management, zustic, lightweight library, React hooks, re
 
 Zustic is a **lightweight, minimal state management library for React** using `useSyncExternalStore`. It's perfect for managing global state in React, React Native, and Next.js applications with zero boilerplate and maximum developer experience.
 
-### ✨ Key Features
+### Key Features
 
 #### Core Features
-- **🪶 Lightweight** - Only ~500B (gzipped) with zero dependencies
-- **⚡ Simple API** - One function (`create`) to manage state
-- **🎣 React Hooks** - Native React hooks integration with automatic subscriptions
-- **📱 Multi-Platform** - React, React Native, Next.js, and more
-- **🔄 Reactive Updates** - Automatic re-renders with optimized batching
-- **💾 TypeScript Support** - Full type safety without extra configuration
-- **🚀 Production Ready** - Trusted by production applications
+- **Lightweight** - Only ~500B (gzipped) with zero dependencies
+- **Simple API** - One function (`create`) to manage state
+- **React Hooks** - Native React hooks integration with automatic subscriptions
+- **Multi-Platform** - React, React Native, Next.js, and more
+- **Reactive Updates** - Automatic re-renders with optimized batching
+- **TypeScript Support** - Full type safety without extra configuration
+- **Production Ready** - Trusted by production applications
 
 #### Advanced Capabilities
-- **🧩 Middleware Support** - Extend functionality with logging, persistence, validation, and more
-- **� Direct State Access** - `get()` function for reading state outside components
-- **🎯 Selective Subscriptions** - Components only re-render when their data changes
-- **⚙️ Extensible** - Build custom middleware for any use case
-- **🧪 Fully Testable** - Easy to test stores with middleware and async operations
-- **🔗 Framework Agnostic Middleware** - Create middleware once, use everywhere
+- **Middleware Support** - Extend functionality with logging, persistence, validation, and more
+- **Direct State Access** - `get()` function for reading state outside components
+- **Selective Subscriptions** - Components only re-render when their data changes
+- **Extensible** - Build custom middleware for any use case
+- **Fully Testable** - Easy to test stores with middleware and async operations
+- **Framework Agnostic Middleware** - Create middleware once, use everywhere
 
 ## What is Zustic?
 
@@ -67,10 +67,10 @@ Zustic provides a simple, functional approach to state management. Instead of co
 | Bundle Size | ~500B | ~6KB | ~2KB | 0B (built-in) |
 | Learning Curve | ⭐ Easy | ⭐⭐⭐⭐⭐ Hard | ⭐⭐ Easy | ⭐⭐⭐ Medium |
 | Boilerplate | Minimal | Massive | Minimal | Some |
-| TypeScript Support | ✅ Excellent | ✅ Good | ✅ Good | ✅ Good |
-| Middleware | ✅ Built-in | ✅ Required | ✅ Optional | ❌ No |
-| Performance | ✅ Optimized | ✅ Good | ✅ Optimized | ⚠️ Re-renders |
-| API Simplicity | ✅ Very Simple | ❌ Complex | ✅ Simple | ⚠️ Provider Hell |
+| TypeScript Support | Excellent | Good | Good | Good |
+| Middleware | Built-in | Required | Optional | No |
+| Performance | Optimized | Good | Optimized | Re-renders |
+| API Simplicity | Very Simple | Complex | Simple | Provider Hell |
 
 ## Quick Example
 
@@ -144,11 +144,11 @@ export const useCounter = create<CounterStore>(
 ```
 
 **Middleware Benefits:**
-- ✅ Add features without modifying store code
-- ✅ Reuse middleware across multiple stores
-- ✅ Logging, persistence, validation out of the box
-- ✅ Time-travel debugging capabilities
-- ✅ Custom business logic easily added
+- Add features without modifying store code
+- Reuse middleware across multiple stores
+- Logging, persistence, validation out of the box
+- Time-travel debugging capabilities
+- Custom business logic easily added
 
 Learn more in [Middleware Guide](./tutorial-extras/middleware)
 

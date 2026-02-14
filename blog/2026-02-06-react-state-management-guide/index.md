@@ -149,11 +149,11 @@ function MyComponent() {
 ```
 
 **Pros:** 
-- ✅ Smallest size (~500B)
-- ✅ Zero dependencies
-- ✅ Simplest API
-- ✅ Built-in middleware
-- ✅ Perfect TypeScript support
+-  Smallest size (~500B)
+-  Zero dependencies
+-  Simplest API
+-  Built-in middleware
+-  Perfect TypeScript support
 
 ## Comparison Table
 
@@ -162,9 +162,9 @@ function MyComponent() {
 | Size | 0B | 6KB | 2KB | **500B** |
 | Boilerplate | Medium | High | Low | **Very Low** |
 | Learning Curve | Medium | Hard | Easy | **Very Easy** |
-| Performance | ⚠️ Re-renders | ✅ Good | ✅ Good | **✅ Optimized** |
-| Middleware | ❌ No | ✅ Yes | ⚠️ Limited | **✅ Powerful** |
-| DevTools | ❌ No | ✅ Great | ⚠️ Limited | ✅ Built-in |
+| Performance |  Re-renders |  Good |  Good | ** Optimized** |
+| Middleware |  No |  Yes |  Limited | ** Powerful** |
+| DevTools |  No |  Great |  Limited |  Built-in |
 
 ## When to Use Each
 
@@ -191,12 +191,12 @@ Functions that intercept state changes for logging, persistence, validation, etc
 
 For most React projects, **Zustic is the perfect choice**:
 
-✅ **Smallest bundle size** - Only ~500B
-✅ **Zero dependencies** - Nothing to install
-✅ **Simplest API** - Learn in 5 minutes
-✅ **Built-in middleware** - Logging, persistence, validation
-✅ **Perfect TypeScript** - Full type inference
-✅ **Production ready** - Used in real apps
+ **Smallest bundle size** - Only ~500B
+ **Zero dependencies** - Nothing to install
+ **Simplest API** - Learn in 5 minutes
+ **Built-in middleware** - Logging, persistence, validation
+ **Perfect TypeScript** - Full type inference
+ **Production ready** - Used in real apps
 
 Get started: [Zustic Documentation](/docs/intro)
 

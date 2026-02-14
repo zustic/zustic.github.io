@@ -26,15 +26,15 @@ Zustic is designed to be the simplest and smallest state management library for 
 
 | Feature | Zustic | Redux | Zustand | MobX | Context API |
 |---------|--------|-------|---------|------|-------------|
-| **Bundle Size** | 🟢 500B | 🟠 6KB | 🟡 2KB | 🔴 16KB | 🟢 0B |
-| **Dependencies** | 🟢 0 | 🟠 1+ | 🟢 0 | 🟡 2+ | 🟢 0 |
-| **Learning Curve** | 🟢 Very Easy | 🔴 Hard | 🟢 Easy | 🟡 Medium | 🟡 Medium |
-| **Boilerplate** | 🟢 Minimal | 🔴 Massive | 🟢 Minimal | 🟡 Some | 🟡 Some |
-| **TypeScript** | 🟢 Excellent | 🟢 Good | 🟢 Good | 🟡 Medium | 🟢 Good |
-| **Middleware** | 🟢 Built-in | 🟠 Required | 🟡 Optional | 🟡 Limited | 🔴 None |
-| **DevTools** | 🟢 Simple | 🟢 Great | 🟡 Good | 🟡 Good | 🔴 None |
-| **Performance** | 🟢 Optimized | 🟢 Good | 🟢 Optimized | 🟢 Good | 🟠 Re-renders |
-| **API Simplicity** | 🟢 Very Simple | 🔴 Complex | 🟢 Simple | 🟡 Medium | 🟡 Complex |
+| **Bundle Size** |  500B |  6KB |  2KB |  16KB |  0B |
+| **Dependencies** |  0 |  1+ |  0 |  2+ |  0 |
+| **Learning Curve** |  Very Easy |  Hard |  Easy |  Medium |  Medium |
+| **Boilerplate** |  Minimal |  Massive |  Minimal |  Some |  Some |
+| **TypeScript** |  Excellent |  Good |  Good |  Medium |  Good |
+| **Middleware** |  Built-in |  Required |  Optional |  Limited |  None |
+| **DevTools** |  Simple |  Great |  Good |  Good |  None |
+| **Performance** |  Optimized |  Good |  Optimized |  Good |  Re-renders |
+| **API Simplicity** |  Very Simple |  Complex |  Simple |  Medium |  Complex |
 
 ## Detailed Comparisons
 
@@ -46,11 +46,11 @@ Zustic is designed to be the simplest and smallest state management library for 
 - Large team that needs strict patterns
 
 **When to use Zustic:**
-- ✅ Startups and small projects
-- ✅ Want minimal boilerplate
-- ✅ Need small bundle size
-- ✅ Prefer simplicity over features
-- ✅ Building with Next.js or React Native
+-  Startups and small projects
+-  Want minimal boilerplate
+-  Need small bundle size
+-  Prefer simplicity over features
+-  Building with Next.js or React Native
 
 **Key Differences:**
 - Redux requires actions, reducers, and dispatch - Zustic just uses `set()`
@@ -73,9 +73,9 @@ Zustic is designed to be the simplest and smallest state management library for 
 - Zustic has built-in DevTools support in roadmap
 
 **Choose Zustic if you want:**
-- ✅ The absolute smallest library
-- ✅ Better middleware architecture
-- ✅ More granular control
+-  The absolute smallest library
+-  Better middleware architecture
+-  More granular control
 
 ### Zustic vs MobX
 
@@ -97,12 +97,12 @@ Zustic is designed to be the simplest and smallest state management library for 
 - Built into React
 
 **Zustic Strengths:**
-- ✅ Avoid Context Provider Hell
-- ✅ No unnecessary re-renders
-- ✅ Simpler to use
-- ✅ Only 500B - negligible cost
-- ✅ Middleware support
-- ✅ Better DevX
+-  Avoid Context Provider Hell
+-  No unnecessary re-renders
+-  Simpler to use
+-  Only 500B - negligible cost
+-  Middleware support
+-  Better DevX
 
 ## Migration Guides
 
@@ -173,21 +173,21 @@ function App() {
 
 ## Why Choose Zustic?
 
-✅ **Smallest Size** - ~500B gzipped with zero dependencies <br/>
-✅ **Zero Learning Curve** - Master it in 5 minutes <br/>
-✅ **TypeScript Native** - Full type inference out of the box <br/>
-✅ **No Provider Hell** - No context providers needed <br/>
-✅ **Built-in Middleware** - Logger, persistence, validation, and custom middleware <br/>
-✅ **Production Ready** - Used in real applications <br/>
-✅ **Perfect for Startups** - Minimal dependencies, maximum simplicity <br/>
-✅ **React 18+ Ready** - Leverages latest React APIs <br/>
+ **Smallest Size** - ~500B gzipped with zero dependencies <br/>
+ **Zero Learning Curve** - Master it in 5 minutes <br/>
+ **TypeScript Native** - Full type inference out of the box <br/>
+ **No Provider Hell** - No context providers needed <br/>
+ **Built-in Middleware** - Logger, persistence, validation, and custom middleware <br/>
+ **Production Ready** - Used in real applications <br/>
+ **Perfect for Startups** - Minimal dependencies, maximum simplicity <br/>
+ **React 18+ Ready** - Leverages latest React APIs <br/>
 
 ## Community & Resources
 
-- 📦 [NPM Package](https://www.npmjs.com/package/zustic)
-- 🐙 [GitHub Repository](https://github.com/DeveloperRejaul/zustic)
-- 📚 [Full Documentation](/)
-- 🐛 [Report Issues](https://github.com/DeveloperRejaul/zustic/issues)
+- [NPM Package](https://www.npmjs.com/package/zustic)
+- [GitHub Repository](https://github.com/DeveloperRejaul/zustic)
+- [Full Documentation](/)
+- [Report Issues](https://github.com/DeveloperRejaul/zustic/issues)
 
 ## Conclusion
 

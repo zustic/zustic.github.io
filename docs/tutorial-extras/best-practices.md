@@ -43,10 +43,10 @@ export type { UserStore } from './userStore';
 ### Usage in Components
 
 ```typescript
-// ✅ Good - import from central location
+//  Good - import from central location
 import { useCounterStore, useUserStore } from '@/stores';
 
-// ❌ Avoid - scattered imports
+//  Avoid - scattered imports
 import { useCounterStore } from '@/stores/counterStore';
 import { useUserStore } from '@/stores/userStore';
 ```
@@ -97,7 +97,7 @@ export const useCounter = create<CounterState>((set, get) => ({
 
 Flatten your state structure for better performance and easier updates:
 
-### ✅ Flat Structure (Recommended)
+###  Flat Structure (Recommended)
 
 ```typescript
 const useUserStore = create((set) => ({
@@ -116,7 +116,7 @@ const useUserStore = create((set) => ({
 }));
 ```
 
-### ❌ Deeply Nested (Avoid)
+###  Deeply Nested (Avoid)
 
 ```typescript
 const useUserStore = create((set) => ({
@@ -153,7 +153,7 @@ const useUserStore = create((set) => ({
 
 Always create new objects instead of mutating existing state:
 
-### ✅ Immutable Updates
+###  Immutable Updates
 
 ```typescript
 // Adding to array
@@ -179,24 +179,24 @@ set((state) => ({
 }));
 ```
 
-### ❌ Mutations to Avoid
+###  Mutations to Avoid
 
 ```typescript
 // Direct array mutation
 set((state) => {
-  state.items.push(newItem);  // ❌ Mutates!
+  state.items.push(newItem);  //  Mutates!
   return state;
 });
 
 // Direct object mutation
 set((state) => {
-  state.user.name = 'New Name';  // ❌ Mutates!
+  state.user.name = 'New Name';  //  Mutates!
   return state;
 });
 
 // Reassigning array elements
 set((state) => {
-  state.items[0] = newItem;  // ❌ Mutates!
+  state.items[0] = newItem;  //  Mutates!
   return state;
 });
 ```
@@ -205,7 +205,7 @@ set((state) => {
 
 Create separate stores for different parts of your application:
 
-### ✅ Separate Stores
+###  Separate Stores
 
 ```typescript
 // Authentication logic
@@ -229,7 +229,7 @@ const useUIStore = create((set) => ({
 }));
 ```
 
-### ❌ Single Monolithic Store
+###  Single Monolithic Store
 
 ```typescript
 const useAppStore = create((set) => ({
@@ -335,11 +335,11 @@ const useStore = create((set) => ({
 ### Minimize Subscriptions
 
 ```typescript
-// ✅ Subscribe only to needed state
+//  Subscribe only to needed state
 const count = useStore((state) => state.count);
 const name = useStore((state) => state.name);
 
-// ❌ Subscribe to entire store when you need one property
+//  Subscribe to entire store when you need one property
 const { count } = useStore(); // Re-renders on any state change
 ```
 

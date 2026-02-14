@@ -15,12 +15,12 @@ Solutions to common issues and frequently asked questions.
 **Solution**: Make sure you're using `set` correctly:
 
 ```typescript
-// ❌ Wrong - trying to access state outside of set function
+//  Wrong - trying to access state outside of set function
 const increment = () => {
   state.count += 1; // state is undefined!
 };
 
-// ✅ Correct - use set with functional update
+//  Correct - use set with functional update
 const increment = () => set((state) => ({ count: state.count + 1 }));
 ```
 
@@ -32,12 +32,12 @@ const increment = () => set((state) => ({ count: state.count + 1 }));
 
 1. **Hook not used at top level**
    ```typescript
-   // ❌ Wrong - conditional hook call
+   //  Wrong - conditional hook call
    if (someCondition) {
      const count = useStore((state) => state.count);
    }
 
-   // ✅ Correct - call at top level
+   //  Correct - call at top level
    const count = useStore((state) => state.count);
    if (someCondition) {
      // use count here
@@ -46,13 +46,13 @@ const increment = () => set((state) => ({ count: state.count + 1 }));
 
 2. **Mutating instead of creating new object**
    ```typescript
-   // ❌ Wrong - mutates existing object
+   //  Wrong - mutates existing object
    set((state) => {
      state.items[0].name = 'Updated';
      return state;
    });
 
-   // ✅ Correct - creates new object
+   //  Correct - creates new object
    set((state) => ({
      items: state.items.map((item, i) =>
        i === 0 ? { ...item, name: 'Updated' } : item
@@ -67,7 +67,7 @@ const increment = () => set((state) => ({ count: state.count + 1 }));
 **Solution**: Properly type your store interface:
 
 ```typescript
-// ✅ Good - define interface first
+//  Good - define interface first
 interface MyStore {
   count: number;
   name: string;
@@ -114,7 +114,7 @@ npm list zustic
 3. Create stores at module level:
 
 ```typescript
-// ✅ Good - store at module level
+//  Good - store at module level
 const useStore = create((set) => ({...}));
 
 function MyComponent() {
@@ -122,7 +122,7 @@ function MyComponent() {
   return <div>{state.count}</div>;
 }
 
-// ❌ Bad - store created on every render
+//  Bad - store created on every render
 function MyComponent() {
   const useStore = create((set) => ({...})); // Creates new store each render!
   return <div></div>;
@@ -136,7 +136,7 @@ function MyComponent() {
 **Solution**: Use a getter function to access current state:
 
 ```typescript
-// ❌ Wrong - stale closure
+//  Wrong - stale closure
 const useStore = create((set, get) => ({
   count: 0,
   increment: () => set((state) => ({ count: state.count + 1 })),
@@ -146,7 +146,7 @@ const useStore = create((set, get) => ({
   },
 }));
 
-// ✅ Correct - use get() for current state
+//  Correct - use get() for current state
 const useStore = create((set, get) => ({
   count: 0,
   increment: () => set((state) => ({ count: state.count + 1 })),
@@ -165,12 +165,12 @@ const useStore = create((set, get) => ({
 **A**: Create multiple stores to separate concerns:
 
 ```typescript
-// ✅ Good - separated concerns
+//  Good - separated concerns
 const useAuthStore = create((set) => ({...})); // Auth logic
 const useUserStore = create((set) => ({...})); // User data
 const useUIStore = create((set) => ({...}));   // UI state
 
-// ❌ Bad - all in one
+//  Bad - all in one
 const useAppStore = create((set) => ({
   // Auth, user, UI, cart, notifications, etc.
 }));

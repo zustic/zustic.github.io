@@ -77,7 +77,7 @@ export const api = createApi({
   },
 
   // Cache duration (default: 30 seconds)
-  clashTimeout: 60 * 1000,
+  cacheTimeout: 60 * 1000,
 
   endpoints: (builder) => ({
     // Query endpoint
@@ -140,7 +140,7 @@ export function UsersList() {
   return (
     <div>
       <button onClick={() => reFetch()}>
-        🔄 Refresh
+         Refresh
       </button>
 
       <ul>
@@ -290,7 +290,7 @@ export function UsersList() {
   return (
     <div>
       <button onClick={() => reFetch()}>
-        🔄 Refresh Data
+         Refresh Data
       </button>
       {/* Display users */}
     </div>
@@ -307,15 +307,15 @@ Zustic Query automatically manages data freshness through intelligent caching:
 ```typescript
 const api = createApi({
   baseQuery: myBaseQuery,
-  clashTimeout: 60 * 1000,  // Cache for 60 seconds
+  cacheTimeout: 60 * 1000,  // Cache for 60 seconds
   endpoints: (builder) => (/* ... */)
 })
 ```
 
 **Cache Behavior:**
-- ✅ Cached data reused if arguments match and cache hasn't expired
-- ✅ `reFetch()` always fetches fresh regardless of cache
-- ✅ Different arguments trigger separate cache entries
+-  Cached data reused if arguments match and cache hasn't expired
+-  `reFetch()` always fetches fresh regardless of cache
+-  Different arguments trigger separate cache entries
 
 ---
 

@@ -91,7 +91,7 @@ const loggerMiddleware = (set, get) => (next) => async (partial) => {
   const prev = get();
   const timestamp = new Date().toISOString();
 
-  console.group(`🔵 State Update - ${timestamp}`);
+  console.group(` State Update - ${timestamp}`);
   console.log('Previous:', prev);
   console.log('Update:', partial);
 
@@ -143,17 +143,17 @@ const validateMiddleware = (set, get) => (next) => async (partial) => {
 
   // Custom validation logic
   if ('age' in updates && updates.age < 0) {
-    console.warn('❌ Age cannot be negative');
+    console.warn(' Age cannot be negative');
     return;
   }
 
   if ('email' in updates && !updates.email.includes('@')) {
-    console.warn('❌ Invalid email');
+    console.warn(' Invalid email');
     return;
   }
 
   await next(partial);
-  console.log('✅ Validation passed');
+  console.log(' Validation passed');
 };
 ```
 
@@ -217,9 +217,9 @@ const asyncMiddleware = (set, get) => (next) => async (partial) => {
 
   try {
     await next(partial);
-    console.log('✅ Update completed');
+    console.log(' Update completed');
   } catch (error) {
-    console.error('❌ Update failed:', error);
+    console.error(' Update failed:', error);
   }
 };
 ```
@@ -294,7 +294,7 @@ const rateLimitMiddleware = (maxUpdates: number, window: number) => {
     const recentUpdates = updates.filter(t => now - t < window);
 
     if (recentUpdates.length >= maxUpdates) {
-      console.warn('⚠️ Rate limit exceeded');
+      console.warn(' Rate limit exceeded');
       return;
     }
 
@@ -317,13 +317,13 @@ const useStore = create(
 Middleware should not have side effects outside of logging/persistence:
 
 ```typescript
-// ✅ Good
+//  Good
 const middleware = (set, get) => (next) => async (partial) => {
   console.log('Updating');
   await next(partial);
 };
 
-// ❌ Bad - modifying external state
+//  Bad - modifying external state
 let counter = 0;
 const badMiddleware = (set, get) => (next) => async (partial) => {
   counter++; // Side effect!
@@ -347,13 +347,13 @@ const safeMiddleware = (set, get) => (next) => async (partial) => {
 ### 3. Avoid Infinite Loops
 
 ```typescript
-// ❌ Bad - causes infinite loop
+//  Bad - causes infinite loop
 const badMiddleware = (set, get) => (next) => async (partial) => {
   await next(partial);
   set(partial); // Calls middleware again!
 };
 
-// ✅ Good - call next only once
+//  Good - call next only once
 const goodMiddleware = (set, get) => (next) => async (partial) => {
   await next(partial);
   console.log('Update complete');
@@ -420,13 +420,13 @@ const asyncLogger = (set, get) => (next) => async (partial) => {
 ### 2. Avoid Heavy Computations
 
 ```typescript
-// ❌ Don't do heavy work in middleware
+//  Don't do heavy work in middleware
 const badMiddleware = (set, get) => (next) => async (partial) => {
   const expensiveCalculation = await runHeavyComputation();
   await next(partial);
 };
 
-// ✅ Keep middleware lightweight
+//  Keep middleware lightweight
 const goodMiddleware = (set, get) => (next) => async (partial) => {
   console.log('Updating');
   await next(partial);

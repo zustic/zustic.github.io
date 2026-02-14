@@ -161,18 +161,18 @@ const validationMiddleware = (set, get) => (next) => async (partial) => {
 
   // Validate the update
   if ('age' in updates && typeof updates.age === 'number' && updates.age < 0) {
-    console.error('❌ Age cannot be negative!');
+    console.error(' Age cannot be negative!');
     return; // Reject the update
   }
 
   if ('email' in updates && !updates.email.includes('@')) {
-    console.error('❌ Invalid email format!');
+    console.error(' Invalid email format!');
     return;
   }
 
   // Update is valid, proceed
   await next(partial);
-  console.log('✅ Validation passed');
+  console.log(' Validation passed');
 };
 ```
 
@@ -333,13 +333,13 @@ const useUserStore = create<UserStore>(
 Middleware should not modify external state directly:
 
 ```typescript
-// ✅ Good
+//  Good
 const middleware = (set, get) => (next) => async (partial) => {
   console.log('Updating');
   await next(partial);
 };
 
-// ❌ Bad
+//  Bad
 let counter = 0;
 const badMiddleware = (set, get) => (next) => async (partial) => {
   counter++; // Side effect!
@@ -350,14 +350,14 @@ const badMiddleware = (set, get) => (next) => async (partial) => {
 ### 2. Call `next` Only Once
 
 ```typescript
-// ✅ Good
+//  Good
 const middleware = (set, get) => (next) => async (partial) => {
   console.log('Before');
   await next(partial);
   console.log('After');
 };
 
-// ❌ Bad - causes issues
+//  Bad - causes issues
 const badMiddleware = (set, get) => (next) => async (partial) => {
   await next(partial);
   set(partial); // Calls middleware again!
@@ -396,13 +396,13 @@ const safeMiddleware = (set, get) => (next) => async (partial) => {
 Avoid heavy computations inside middleware:
 
 ```typescript
-// ✅ Lightweight
+//  Lightweight
 const middleware = (set, get) => (next) => async (partial) => {
   console.log('Update');
   await next(partial);
 };
 
-// ❌ Heavy computation
+//  Heavy computation
 const heavyMiddleware = (set, get) => (next) => async (partial) => {
   const result = await runExpensiveCalculation();
   await next(partial);
@@ -452,10 +452,10 @@ describe('loggerMiddleware', () => {
 
 Zustic middleware provides a clean, functional approach to extending state management:
 
-✅ **Simple** - Easy to understand and create
-✅ **Composable** - Chain multiple middleware together
-✅ **Powerful** - Handle logging, persistence, validation, and more
-✅ **Flexible** - Create custom middleware for any use case
+ **Simple** - Easy to understand and create
+ **Composable** - Chain multiple middleware together
+ **Powerful** - Handle logging, persistence, validation, and more
+ **Flexible** - Create custom middleware for any use case
 
 Start using middleware to build more robust, observable, and maintainable state management!
 
