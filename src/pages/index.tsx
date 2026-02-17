@@ -26,9 +26,11 @@ function HomepageHeader() {
               Get Started
             </Link>
             <Link
+              target="_blank"
+              rel="noopener noreferrer"
               className={clsx('button', styles.buttonSecondary)}
-              to="https://github.com/DeveloperRejaul/zustic">
-              View on GitHub
+              to="/query-builder">
+              Build Queries Live →
             </Link>
           </div>
           <div className={styles.stats}>

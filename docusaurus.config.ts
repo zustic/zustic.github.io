@@ -237,6 +237,10 @@ const config: Config = {
               label: 'Author GitHub',
               href: 'https://github.com/DeveloperRejaul',
             },
+            {
+              label: 'Query builder',
+              href:'https://zustic.github.io/query-builder'
+            },
           ],
         },
       ],
