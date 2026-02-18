@@ -20,8 +20,8 @@ Zustic Query is a minimal yet powerful server state management library. Built on
 - **Plugins** — Lifecycle hooks (beforeQuery, afterQuery, onError) for side effects
 
 ## Basic Example
-```tsx
 Here's how the pieces fit together:
+```tsx
 import { createApi } from 'zustic/query'
 
 const api = createApi({

@@ -724,3 +724,364 @@
 .endpointsContainer::-webkit-scrollbar-thumb:hover {
   background-color: #6b7280;
 }
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  /* Tablet View */
+  .sidebar {
+    width: 280px;
+  }
+
+  .sidebarHeader {
+    padding: 16px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .listHeader {
+    padding: 12px 16px;
+  }
+
+  .endpoint {
+    padding: 10px;
+  }
+
+  .endpointName {
+    font-size: 13px;
+  }
+
+  .endpointUrl {
+    font-size: 11px;
+  }
+
+  .header {
+    padding: 16px 24px;
+  }
+
+  .editor {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .sectionTitle {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .parametersPanel {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .codeBlock {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile View */
+  .container {
+    height: auto;
+  }
+
+  .builderContainer {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  }
+
+  .sidebarHeader {
+    padding: 12px 16px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .logoSubtitle {
+    font-size: 9px;
+  }
+
+  .listHeader {
+    padding: 10px 16px;
+  }
+
+  .listHeader h3 {
+    font-size: 11px;
+  }
+
+  .addButton {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+
+  .endpointsContainer {
+    max-height: 200px;
+    padding: 4px;
+  }
+
+  .endpoint {
+    padding: 8px;
+    margin-bottom: 2px;
+  }
+
+  .endpointContent {
+    gap: 8px;
+  }
+
+  .methodBadge {
+    width: 40px;
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+
+  .endpointName {
+    font-size: 12px;
+  }
+
+  .endpointUrl {
+    font-size: 10px;
+  }
+
+  .deleteButton {
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .headerTitle h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .headerTitle code {
+    font-size: 12px;
+  }
+
+  .themeToggle {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .editor {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    height: auto;
+  }
+
+  .section {
+    border-radius: 4px;
+  }
+
+  .sectionTitle {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .parametersPanel {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .paramGroup {
+    gap: 4px;
+  }
+
+  .paramLabel {
+    font-size: 12px;
+  }
+
+  .paramInput,
+  .paramSelect {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .paramRow {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .paramInput {
+    width: 100%;
+  }
+
+  .paramSelect {
+    width: 100%;
+  }
+
+  .removeParamButton {
+    width: 100%;
+    padding: 6px 8px;
+  }
+
+  .bodyInput {
+    min-height: 60px;
+    max-height: 100px;
+    font-size: 12px;
+  }
+
+  .codeHeader {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 12px;
+    align-items: flex-start;
+  }
+
+  .sectionTitle {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .copyButton {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .codeBlock {
+    font-size: 10px;
+    padding: 12px;
+  }
+
+  .lineNumber {
+    width: 30px;
+    margin-right: 8px;
+    font-size: 10px;
+  }
+
+  .codeBlock > div {
+    padding: 0 2px;
+  }
+
+  .empty {
+    padding: 20px;
+    font-size: 14px;
+  }
+
+  .addParamButton {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .urlDisplay {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .divider {
+    margin: 6px 0;
+  }
+
+  .formInput,
+  .formSelect {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .formButtons {
+    gap: 6px;
+  }
+
+  .saveButton,
+  .cancelButton {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .newEndpointForm {
+    padding: 8px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Small Mobile View */
+  .sidebar {
+    max-height: 35vh;
+  }
+
+  .endpointsContainer {
+    max-height: 120px;
+  }
+
+  .logo {
+    font-size: 14px;
+  }
+
+  .header {
+    padding: 8px 12px;
+  }
+
+  .headerTitle h2 {
+    font-size: 16px;
+  }
+
+  .editor {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .parametersPanel {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .paramRow {
+    gap: 3px;
+  }
+
+  .paramInput,
+  .paramSelect {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  .codeBlock {
+    font-size: 9px;
+    padding: 8px;
+  }
+
+  .lineNumber {
+    width: 25px;
+    margin-right: 4px;
+    font-size: 9px;
+  }
+
+  .methodBadge {
+    width: 35px;
+    font-size: 9px;
+  }
+
+  .copyButton {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  .themeToggle {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+}

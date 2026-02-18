@@ -405,7 +405,7 @@ const api = createApi({
 
 ### Execution Flow
 
-```
+```bash
 Request comes in
     ↓
 authMiddleware (checks token) → call next()
