@@ -389,28 +389,68 @@ Follow these patterns to build robust, performant applications.
 - Don't pass `undefined` as query arguments
 - Don't ignore error states in UI
 
-## TypeScript Integration
+## Manual Query Data Updates
 
-Zustic Query provides full type inference through generics, enabling compile-time safety and superior IDE support.
+Update cached query data programmatically without refetching, enabling optimistic updates, real-time synchronization, and complex state mutations. The `updateQueryData` utility provides direct access to mutate cached data.
 
-### Type-Safe Query Definitions
+### Updating Query Cache
 
 ```tsx
-interface User {
-  id: number
-  name: string
-  email: string
-}
+export function UpdateUserEmail() {
+  const [email, setEmail] = useState('')
+  const { mutate: updateUser } = useUpdateUserMutation()
+  
+  const handleSubmit = async () => {
+    try {
+      const result = await updateUser({ email }).unwrap()
+      
+      // Manually update the cached query data
+      api.utils.updateQueryData('getUser', { page: 1, limit: 10 }, (draft) => {
+        draft = draft.map(d => ({
+          ...d,
+          email: email
+        }))
+        return draft
+      })
+      
+      setEmail('')
+    } catch (error) {
+      console.error('Failed to update:', error)
+    }
+  }
 
-const api = createApi({
-  baseQuery: async (params) => { /* ... */ },
-  endpoints: (builder) => ({
-    getUser: builder.query({
-      query: (id: number) => ({ url: `/users/${id}` })
-    })
-  })
+  return (
+    <div>
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="New email"
+      />
+      <button onClick={handleSubmit}>Update Email</button>
+    </div>
+  )
+}
+```
+
+### Bulk Data Mutations
+
+Transform entire dataset with complex logic:
+
+```tsx
+// Remove user from cached list
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  return draft.filter(user => user.id !== userId)
 })
 
-// Hook types are inferred
-const { data } = useGetUserQuery(123)  // data: any | undefined
+// Sort cached users
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  draft.sort((a, b) => a.name.localeCompare(b.name))
+  return draft
+})
+
+// Add new item to cached list
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  draft.push(newUser)
+  return draft
+})
 ```
