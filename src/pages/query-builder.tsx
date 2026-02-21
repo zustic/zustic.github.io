@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import { themes, Highlight } from 'prism-react-renderer'
 import styles from './query-builder.module.css'
 import Head from '@docusaurus/Head'
+import {create, Middleware} from 'zustic'
 
 interface QueryEndpoint {
+  id: string
   name: string
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
   url: string
-  body?: string
-  params?: Record<string, string>
-  headers?: Record<string, string>
 }
 
 interface QueryParam {
@@ -18,36 +17,161 @@ interface QueryParam {
   type: 'string' | 'number' | 'boolean'
 }
 
-export default function QueryBuilder(): React.ReactNode {
-  const [endpoints, setEndpoints] = useState<QueryEndpoint[]>([{ name: 'Get Users', method: 'GET', url: '/users' }])
+interface EndpointData {
+  params: QueryParam[]
+  body: string
+}
 
-  const [selectedEndpoint, setSelectedEndpoint] = useState<QueryEndpoint | null>(endpoints[0])
+type State = {
+  endpoints: QueryEndpoint[]
+  endpointDataMap: Record<string, EndpointData>
+}
+type Action = {
+  setEndpoints: (endpoints: QueryEndpoint[]) => void
+  setEndpointData: (endpointId: string, data: EndpointData) => void
+}
+
+const persistMiddleware = <T extends object>(): Middleware<T> => (set, get) => (next) => async (partial) => {
+  next(partial)
+  try {
+    const state = get()
+    localStorage.setItem('query-builder', JSON.stringify(state))
+  } catch (error) {
+    console.error('Failed to persist:', error)
+  }
+}
+
+const useQueryBuilderStore = create<State & Action>((set) => {
+    const saved = localStorage.getItem('query-builder')
+    const parsed = saved ? JSON.parse(saved) : null
+
+    return {
+      endpoints: parsed?.endpoints || [
+        {
+          id: 'default-1',
+          name: 'Get Users',
+          method: 'GET',
+          url: '/users'
+        }
+      ],
+      endpointDataMap: parsed?.endpointDataMap || {
+        'default-1': { params: [], body: '' }
+      },
+      setEndpoints: (endpoints) => set({ endpoints }),
+      setEndpointData: (endpointId, data) =>
+        set((state) => ({
+          endpointDataMap: {
+            ...state.endpointDataMap,
+            [endpointId]: data
+          }
+        }))
+    }
+  },
+  [persistMiddleware()]
+)
+
+
+
+export default function QueryBuilder(): React.ReactNode {
+  const { setEndpoints, endpoints, endpointDataMap, setEndpointData } =
+    useQueryBuilderStore()
+  const [selectedEndpoint, setSelectedEndpoint] = useState<QueryEndpoint | null>(
+    endpoints[0] || null
+  )
+
   const [showNewForm, setShowNewForm] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const [newEndpoint, setNewEndpoint] = useState<QueryEndpoint>({
+    id: '',
     name: '',
     method: 'GET',
-    url: '',
-    params: {},
-    headers: {},
+    url: ''
   })
-  const [queryParams, setQueryParams] = useState<QueryParam[]>([])
-  const [requestBody, setRequestBody] = useState<string>('')
   const [copySuccess, setCopySuccess] = useState(false)
+  const [validationError, setValidationError] = useState<string>('')
 
+  // Filter endpoints by name or URL
+  const filteredEndpoints = endpoints.filter((endpoint) => {
+    const searchLower = searchQuery.toLowerCase()
+    return (
+      endpoint.name.toLowerCase().includes(searchLower) ||
+      endpoint.url.toLowerCase().includes(searchLower)
+    )
+  })
+
+  // Get current endpoint's data
+  const getCurrentEndpointData = (): EndpointData => {
+    if (!selectedEndpoint) return { params: [], body: '' }
+    return (
+      endpointDataMap[selectedEndpoint.id] || { params: [], body: '' }
+    )
+  }
+
+  const currentData = getCurrentEndpointData()
+  const queryParams = currentData.params
+  const requestBody = currentData.body
+
+  // Update params for current endpoint
+  const updateQueryParams = (newParams: QueryParam[]) => {
+    if (!selectedEndpoint) return
+    setEndpointData(selectedEndpoint.id, {
+      ...currentData,
+      params: newParams
+    })
+  }
+
+  // Update body for current endpoint
+  const updateRequestBody = (newBody: string) => {
+    if (!selectedEndpoint) return
+    setEndpointData(selectedEndpoint.id, {
+      ...currentData,
+      body: newBody
+    })
+  }
 
   const addEndpoint = () => {
-    if (newEndpoint.name && newEndpoint.url) {
-      setEndpoints([...endpoints, newEndpoint])
-      setSelectedEndpoint(newEndpoint)
-      setNewEndpoint({ name: '', method: 'GET', url: '' })
-      setShowNewForm(false)
+    // Reset error
+    setValidationError('')
+
+    // Validate name is not empty
+    if (!newEndpoint.name.trim()) {
+      setValidationError('Endpoint name is required')
+      return
     }
+
+    // Validate URL is not empty
+    if (!newEndpoint.url.trim()) {
+      setValidationError('Endpoint URL is required')
+      return
+    }
+
+    // Check for duplicate name (case-insensitive)
+    const duplicateName = endpoints.some(
+      ep => ep.name.toLowerCase() === newEndpoint.name.toLowerCase()
+    )
+    if (duplicateName) {
+      setValidationError(`Endpoint "${newEndpoint.name}" already exists`)
+      return
+    }
+
+    // All validation passed, add endpoint
+    const id = `endpoint-${Date.now()}`
+    const endpoint: QueryEndpoint = {
+      ...newEndpoint,
+      id
+    }
+    setEndpoints([...endpoints, endpoint])
+    setEndpointData(id, { params: [], body: '' })
+    setSelectedEndpoint(endpoint)
+    setNewEndpoint({ id: '', name: '', method: 'GET', url: '' })
+    setShowNewForm(false)
   }
 
   const deleteEndpoint = (index: number) => {
+    const endpoint = endpoints[index]
     const updated = endpoints.filter((_, i) => i !== index)
     setEndpoints(updated)
-    if (selectedEndpoint === endpoints[index] && updated.length > 0) {
+    if (selectedEndpoint?.id === endpoint.id && updated.length > 0) {
       setSelectedEndpoint(updated[0])
     }
   }
@@ -58,7 +182,7 @@ export default function QueryBuilder(): React.ReactNode {
     const hasBody = requestBody.trim()
     const paramEntries = queryParams.filter(p => p.value)
     const isQuery = ['GET'].includes(selectedEndpoint.method)
-    const endpointName = selectedEndpoint.name.replace(/\s+/g, '_').toLowerCase()
+    const endpointName = selectedEndpoint.name.replace(/\s+/g, '_')
 
     // Build query string for URL
     let queryString = ''
@@ -139,17 +263,19 @@ export default function QueryBuilder(): React.ReactNode {
   }
 
   const addQueryParam = () => {
-    setQueryParams([...queryParams, { key: '', value: '', type: 'string' }])
+    const newParams = [...queryParams, { key: '', value: '', type: 'string' as const }]
+    updateQueryParams(newParams)
   }
 
   const removeQueryParam = (index: number) => {
-    setQueryParams(queryParams.filter((_, i) => i !== index))
+    const newParams = queryParams.filter((_, i) => i !== index)
+    updateQueryParams(newParams)
   }
 
   const updateQueryParam = (index: number, field: keyof QueryParam, value: string) => {
     const updated = [...queryParams]
-    updated[index] = { ...updated[index], [field]: value }
-    setQueryParams(updated)
+    updated[index] = { ...updated[index], [field]: value as any }
+    updateQueryParams(updated)
   }
 
   return (
@@ -179,16 +305,42 @@ export default function QueryBuilder(): React.ReactNode {
             </button>
           </div>
 
+          {/* Search Input */}
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search by name or URL..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+            {searchQuery && (
+              <button
+                className={styles.clearSearchButton}
+                onClick={() => setSearchQuery('')}
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           {showNewForm && (
             <div className={styles.newEndpointForm}>
+              {validationError && (
+                <div className={styles.errorMessage}>
+                  <span>⚠️ {validationError}</span>
+                </div>
+              )}
               <input
                 type="text"
                 placeholder="Endpoint name"
                 value={newEndpoint.name}
-                onChange={(e) =>
+                onChange={(e) => {
                   setNewEndpoint({ ...newEndpoint, name: e.target.value })
-                }
-                className={styles.formInput}
+                  setValidationError('')
+                }}
+                className={`${styles.formInput} ${validationError ? styles.inputError : ''}`}
               />
               <select
                 value={newEndpoint.method}
@@ -209,10 +361,11 @@ export default function QueryBuilder(): React.ReactNode {
                 type="text"
                 placeholder="URL (e.g., /users)"
                 value={newEndpoint.url}
-                onChange={(e) =>
+                onChange={(e) => {
                   setNewEndpoint({ ...newEndpoint, url: e.target.value })
-                }
-                className={styles.formInput}
+                  setValidationError('')
+                }}
+                className={`${styles.formInput} ${validationError ? styles.inputError : ''}`}
               />
               <div className={styles.formButtons}>
                 <button
@@ -232,35 +385,42 @@ export default function QueryBuilder(): React.ReactNode {
           )}
 
           <div className={styles.endpointsContainer}>
-            {endpoints.map((endpoint, index) => (
-              <div
-                key={index}
-                className={`${styles.endpoint} ${
-                  selectedEndpoint === endpoint ? styles.active : ''
-                }`}
-                onClick={() => setSelectedEndpoint(endpoint)}
-              >
-                <div className={styles.endpointContent}>
-                  <span className={`${styles.methodBadge} ${styles[`methodBadge${endpoint.method}`]}`}>
-                    {endpoint.method}
-                  </span>
-                  <div className={styles.endpointInfo}>
-                    <div className={styles.endpointName}>{endpoint.name}</div>
-                    <div className={styles.endpointUrl}>{endpoint.url}</div>
-                  </div>
-                </div>
-                <button
-                  className={styles.deleteButton}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    deleteEndpoint(index)
-                  }}
-                  title="Delete endpoint"
+            {filteredEndpoints.length > 0 ? (
+              filteredEndpoints.map((endpoint, index) => (
+                <div
+                  key={index}
+                  className={`${styles.endpoint} ${
+                    selectedEndpoint?.id === endpoint.id ? styles.active : ''
+                  }`}
+                  onClick={() => setSelectedEndpoint(endpoint)}
                 >
-                  ✕
-                </button>
+                  <div className={styles.endpointContent}>
+                    <span className={`${styles.methodBadge} ${styles[`methodBadge${endpoint.method}`]}`}>
+                      {endpoint.method}
+                    </span>
+                    <div className={styles.endpointInfo}>
+                      <div className={styles.endpointName}>{endpoint.name}</div>
+                      <div className={styles.endpointUrl}>{endpoint.url}</div>
+                    </div>
+                  </div>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      const actualIndex = endpoints.findIndex(ep => ep.id === endpoint.id)
+                      deleteEndpoint(actualIndex)
+                    }}
+                    title="Delete endpoint"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className={styles.noResults}>
+                <p>No endpoints found</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </aside>
@@ -278,15 +438,6 @@ export default function QueryBuilder(): React.ReactNode {
                   <span className={styles.methodString}>{selectedEndpoint.url}</span>
                 </code>
               </div>
-              {/* <select
-                value={colorMode}
-                onChange={(e) => setColorMode(e.target.value as 'dark' | 'light')}
-                className={styles.themeToggle}
-                title="Switch theme"
-              >
-                <option value="dark">🌙 Dark</option>
-                <option value="light">☀️ Light</option>
-              </select> */}
             </div>
 
             {/* Editor Area */}
@@ -365,7 +516,7 @@ export default function QueryBuilder(): React.ReactNode {
                         className={styles.bodyInput}
                         placeholder='{"id": 1, "name": "John"}'
                         value={requestBody}
-                        onChange={(e) => setRequestBody(e.target.value)}
+                        onChange={(e) => updateRequestBody(e.target.value)}
                       />
                     </div>
                   )}
