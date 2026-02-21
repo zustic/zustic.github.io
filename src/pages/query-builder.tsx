@@ -3,6 +3,8 @@ import { themes, Highlight } from 'prism-react-renderer'
 import styles from './query-builder.module.css'
 import Head from '@docusaurus/Head'
 import {create, Middleware} from 'zustic'
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
 
 interface QueryEndpoint {
   id: string
@@ -35,15 +37,22 @@ const persistMiddleware = <T extends object>(): Middleware<T> => (set, get) => (
   next(partial)
   try {
     const state = get()
-    localStorage.setItem('query-builder', JSON.stringify(state))
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('query-builder', JSON.stringify(state))
+    }
   } catch (error) {
     console.error('Failed to persist:', error)
   }
 }
 
 const useQueryBuilderStore = create<State & Action>((set) => {
-    const saved = localStorage.getItem('query-builder')
-    const parsed = saved ? JSON.parse(saved) : null
+    let saved = null
+    let parsed = null
+
+    if (typeof window !== 'undefined') {
+      saved = window.localStorage.getItem('query-builder')
+      parsed = saved ? JSON.parse(saved) : null
+    }
 
     return {
       endpoints: parsed?.endpoints || [
@@ -73,6 +82,13 @@ const useQueryBuilderStore = create<State & Action>((set) => {
 
 
 export default function QueryBuilder(): React.ReactNode {
+return (
+    <BrowserOnly>
+      {() => <QueryBuilderCom />}
+    </BrowserOnly>
+  );
+}
+function QueryBuilderCom(): React.ReactNode {
   const { setEndpoints, endpoints, endpointDataMap, setEndpointData } =
     useQueryBuilderStore()
   const [selectedEndpoint, setSelectedEndpoint] = useState<QueryEndpoint | null>(
