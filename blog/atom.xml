@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zustic.github.io/blog</id>
-    <title>Zustic - Lightweight State Management Library for React Blog</title>
+    <title>Zustic - Ultra-Lightweight State Management &amp; Query System Blog</title>
     <updated>2026-02-18T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zustic.github.io/blog"/>
-    <subtitle>Zustic - Lightweight State Management Library for React Blog</subtitle>
+    <subtitle>Zustic - Ultra-Lightweight State Management &amp; Query System Blog</subtitle>
     <icon>https://zustic.github.io/img/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[Zustic Query: Complete Guide to Server State Management]]></title>
