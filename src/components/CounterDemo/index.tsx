@@ -2,21 +2,27 @@ import { useState } from 'react';
 import styles from './styles.module.css';
 import Heading from '@theme/Heading';
 import {themes ,Highlight}from 'prism-react-renderer';
-
 import { useColorMode } from '@docusaurus/theme-common';
+import QueryDemo from '@site/src/components/QueryDemo';
 
 export default function CounterDemo() {
   const [count, setCount] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   const increment = () => setCount(count + 1);
   const decrement = () => setCount(count - 1);
   const reset = () => setCount(0);
   const colorMode = useColorMode()
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const code = `// store.ts
-  
 import { create } from 'zustic';
+
 type CounterStore = {
   count: number;
   inc: () => void;
@@ -35,46 +41,60 @@ export const useCounter = create<CounterStore>((set) => ({
 
   return (
     <section className={styles.demoSection}>
-      <div className="container">                    
-       <div className={styles.demoContainer}>
-        {/* Prism Code */}
-        <Highlight 
-        theme={colorMode.colorMode === 'dark' ? themes.dracula : themes.github}
-            code={code} 
-            language="ts"
-            >
-            {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre className={`${className} ${styles.codeBlock}` } style={style}>
-                {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line, key: i })}>
-                    {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token, key })} />
-                    ))}
-                </div>
-                ))}
-            </pre>
-            )}
-        </Highlight>
-        {/* Live Counter Panel */}
-        <div className={styles.demoPanel}>
-        <div className={styles.demoHeader}>Live Demo</div>
-        <div className={styles.counterDisplay}>
-            <div className={styles.countValue}>{count}</div>
-            <p className={styles.countLabel}>Current Count</p>
-        </div>
+      <div className="container">
+        {/* Two Cards Grid */}
+        <div className={styles.cardsGrid}>
+          {/* State Management Card */}
+          <div className={styles.demoCard}>
+            <div className={styles.cardHeader}>
+              <div className={styles.countValue}>{count}</div>
+              <div className={styles.buttonGroup}>
+                <button className={`${styles.btn} ${styles.btnDecrement}`} onClick={decrement}>
+                  ➖
+                </button>
+                <button className={`${styles.btn} ${styles.btnReset}`} onClick={reset}>
+                  ⟲
+                </button>
+                <button className={`${styles.btn} ${styles.btnIncrement}`} onClick={increment}>
+                  ➕
+                </button>
+              </div>
+            </div>
 
-        <div className={styles.buttonGroup}>
-            <button className={`${styles.btn} ${styles.btnDecrement}`} onClick={decrement}>
-            ➖ Decrease
-            </button>
-            <button className={`${styles.btn} ${styles.btnReset}`} onClick={reset}>
-             Reset
-            </button>
-            <button className={`${styles.btn} ${styles.btnIncrement}`} onClick={increment}>
-            ➕ Increase
-            </button>
-        </div>
-        </div>
+            {/* Code Section */}
+            <div className={styles.codeSection}>
+              <div className={styles.codeSectionHeader}>
+                <div className={styles.sectionLabel}>Code</div>
+                <button
+                  className={`${styles.copyButton} ${copied ? styles.copyButtonCopied : ''}`}
+                  onClick={copyToClipboard}
+                  title="Copy code"
+                >
+                  {copied ? '✓ Copied' : '📋 Copy'}
+                </button>
+              </div>
+              <Highlight 
+                theme={colorMode.colorMode === 'dark' ? themes.dracula : themes.github}
+                code={code} 
+                language="ts"
+              >
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                  <pre className={`${className} ${styles.codeBlock}`} style={style}>
+                    {tokens.map((line, i) => (
+                      <div key={i} {...getLineProps({ line, key: i })}>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token, key })} />
+                        ))}
+                      </div>
+                    ))}
+                  </pre>
+                )}
+              </Highlight>
+            </div>
+          </div>
+
+          {/* Query Demo Card */}
+          <QueryDemo />
         </div>
 
         {/* Why Zustic Section */}

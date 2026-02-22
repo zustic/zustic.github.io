@@ -1,294 +1,186 @@
-/* ================================
-   Modern Comparison Table (Div) start
-================================ */
-
-.comparisonGrid {
-  margin-top: 2.5rem;
-  border-radius: 14px;
+/* Demo Section */
+.demoSection {
+  padding: 80px 0;
+  background: transparent;
+  position: relative;
   overflow: hidden;
+}
+
+.demoContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.demoCard {
+  background: var(--ifm-card-background-color);
   border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
 }
 
-html[data-theme='dark'] .comparisonGrid {
-  color: #ffffff;
-}
-
-/* Header */
-.comparisonHeader {
-  display: grid;
-  grid-template-columns: 2fr repeat(4, 1fr);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.comparisonHeader > div {
-  padding: 0.9rem 1rem;
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.comparisonHeader > div:last-child {
-  border-right: none;
-}
-
-/* Rows */
-.comparisonRow {
-  display: grid;
-  grid-template-columns: 2fr repeat(4, 1fr);
-}
-
-.comparisonRow > div {
-  padding: 0.85rem 1rem;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-  font-size: 0.9rem;
-}
-
-.comparisonRow > div:last-child {
-  border-right: none;
-}
-
-/* Feature column */
-.feature {
-  font-weight: 500;
-  background: linear-gradient(
-    90deg,
-    var(--ifm-color-emphasis-100),
-    transparent
-  );
-}
-
-/* Highlight Zustic column */
-.best {
-  font-weight: 600;
-  color: var(--ifm-color-primary);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--ifm-color-primary) 10%, transparent),
-    transparent
-  );
-}
-
-/* Hover effect */
-.comparisonRow:hover {
-  background: color-mix(
-    in srgb,
-    var(--ifm-color-primary) 3%,
-    var(--ifm-background-surface-color)
-  );
-}
-
-
-[data-theme='dark'] .comparisonGrid {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-[data-theme='dark'] .comparisonHeader {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.02)
-  );
-}
-
-[data-theme='dark'] .comparisonRow > div {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-[data-theme='dark'] .feature {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.06),
-    transparent
-  );
-}
-
-
-@media (max-width: 768px) {
-  .comparisonHeader {
-    display: none;
-  }
-
-  .comparisonRow {
-    grid-template-columns: 1fr;
-    border-top: 1px solid var(--ifm-color-emphasis-200);
-  }
-
-  .comparisonRow > div {
-    display: flex;
-    justify-content: space-between;
-    border-right: none;
-  }
-
-  .comparisonRow > div::before {
-    content: attr(data-label);
-    font-weight: 500;
-    opacity: 0.7;
-  }
-}
-
-
-
-/* ================================
-   Modern Comparison Table (Div) end
-================================ */
-
-
-
-
-/* ================================
-   demo style start
-================================ */
-
-/* =========================
-   Live Demo Panel
-========================= */
-.demoPanel {
-  background: var(--ifm-background-surface-color);
-  padding: 1.7rem 1.5rem;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+.cardHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s ease;
-  border-radius: 10px;
+  gap: 14px;
 }
 
-
-.codeBlock {
-    margin: 0;
+.codeSection {
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  flex: 1;
 }
 
-
-.demoPanel:hover {
-  transform: translateY(-2px);
-}
-
-.demoHeader {
+.sectionLabel {
+  font-size: 12px;
   font-weight: 700;
-  font-size: 2.1rem;
-  margin-bottom: 1.5rem;
-  color: var(--ifm-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #2e8555;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.counterDisplay {
-  text-align: center;
-  margin-bottom: 2rem;
+.sectionLabel::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #2e8555;
+  border-radius: 50%;
 }
+
+.codeSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.copyButton {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  color: #2e8555;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+html[data-theme='dark'] .copyButton {
+  color: #4db870;
+  border-color: rgba(77, 184, 112, 0.3);
+}
+
+.copyButton:hover {
+  background: rgba(46, 133, 85, 0.1);
+  border-color: #2e8555;
+}
+
+html[data-theme='dark'] .copyButton:hover {
+  background: rgba(77, 184, 112, 0.1);
+  border-color: #4db870;
+}
+
+.copyButtonCopied {
+  background: rgba(46, 133, 85, 0.15);
+  border-color: #2e8555;
+  color: #2e8555;
+}
+
 
 .countValue {
   font-size: 3.5rem;
   font-weight: 800;
-  color: var(--ifm-color-primary);
-}
-
-.countLabel {
-  opacity: 0.7;
-  font-size: 1rem;
-}
-
-.buttonGroup {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
-.btn {
-  padding: 0.6rem 1.25rem;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.25s ease;
-}
-
-.btnIncrement { background: var(--ifm-color-primary); color: white; }
-.btnDecrement { background: #ff6b6b; color: white; }
-.btnReset { background: #6c757d; color: white; }
-
-.btnIncrement:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(37, 194, 160, 0.4); }
-.btnDecrement:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4); }
-.btnReset:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(108, 117, 125, 0.4); }
-
-.demoContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* two equal columns */
-  gap: 2rem; /* spacing between columns */
-  align-items: start; /* align items to top */
-}
-
-/* Responsive: stack columns on smaller screens */
-@media (max-width: 996px) {
-  .demoContainer {
-    grid-template-columns: 1fr; /* single column */
-  }
-}
-
-/* Optional: extra spacing on very small screens */
-@media (max-width: 576px) {
-  .demoContainer {
-    gap: 1.5rem;
-  }
-}
-
-/* ================================
-   demo style end
-================================ */
-
-
-.counterDisplay {
-  margin: 1.5rem 0 2rem 0;
-}
-
-.countValue {
-  font-size: 3.5rem;
-  font-weight: 700;
   color: #2e8555;
   margin: 0;
   line-height: 1;
+  letter-spacing: -1px;
 }
 
-.countLabel {
-  margin: 0.5rem 0 0 0;
-  color: #6c757d;
-  font-size: 0.95rem;
-  font-weight: 500;
+.codeBlock {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  overflow-x: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 133, 85, 0.3) transparent;
+  flex: 1;
 }
 
-html[data-theme='dark'] .countLabel {
-  color: #b0b0b0;
+.codeBlock::-webkit-scrollbar {
+  height: 6px;
+}
+
+.codeBlock::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codeBlock::-webkit-scrollbar-thumb {
+  background: rgba(46, 133, 85, 0.3);
+  border-radius: 3px;
 }
 
 .buttonGroup {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
-  margin: 1.5rem 0 1.5rem 0;
-  width: 100%;
+  flex-wrap: wrap;
 }
 
 .btn {
-  padding: 0.6rem 1.2rem;
+  padding: 12px 16px;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  flex: 1;
-  min-width: 100px;
-  max-width: 120px;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 133, 85, 0.2);
 }
 
 .btn:active {
-  opacity: 0.8;
+  transform: translateY(0);
 }
 
 .btnIncrement {
@@ -297,7 +189,7 @@ html[data-theme='dark'] .countLabel {
 }
 
 .btnIncrement:hover {
-  background: #29784c;
+  background: #35a062;
 }
 
 .btnDecrement {
@@ -306,7 +198,7 @@ html[data-theme='dark'] .countLabel {
 }
 
 .btnDecrement:hover {
-  background: #c82333;
+  background: #e74c3c;
 }
 
 .btnReset {
@@ -315,7 +207,157 @@ html[data-theme='dark'] .countLabel {
 }
 
 .btnReset:hover {
-  background: #5a6268;
+  background: #7a8288;
+}
+
+.codeBlock {
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 24px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 133, 85, 0.3) transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.codeBlock::-webkit-scrollbar {
+  height: 6px;
+}
+
+.codeBlock::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codeBlock::-webkit-scrollbar-thumb {
+  background: rgba(46, 133, 85, 0.3);
+  border-radius: 3px;
+}
+
+.demoPanel {
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.counterDisplay {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.countValue {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #2e8555;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.countLabel {
+  margin: 12px 0 0 0;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+
+.btn {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 133, 85, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btnIncrement {
+  background: #2e8555;
+  color: white;
+}
+
+.btnIncrement:hover {
+  background: #35a062;
+}
+
+.btnDecrement {
+  background: #dc3545;
+  color: white;
+}
+
+.btnDecrement:hover {
+  background: #e74c3c;
+}
+
+.btnReset {
+  background: #6c757d;
+  color: white;
+}
+
+.btnReset:hover {
+  background: #7a8288;
+}
+
+.statsBox {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: var(--ifm-breadcrumb-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+}
+
+.statLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--ifm-color-emphasis-600);
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2e8555;
+  margin-top: 4px;
 }
 
 /* Why Section */
@@ -397,8 +439,6 @@ html[data-theme='dark'] .whyCard p {
   color: #b0b0b0;
 }
 
-
-
 /* Comparison Section */
 .comparisonSection {
   margin-top: 3rem;
@@ -420,29 +460,273 @@ html[data-theme='dark'] .comparisonTitle {
   color: #ffffff;
 }
 
+/* Comparison Grid */
+.comparisonGrid {
+  margin-top: 2.5rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
 
-html[data-theme='dark'] .best {
+html[data-theme='dark'] .comparisonGrid {
+  color: #ffffff;
+}
+
+/* Header */
+.comparisonHeader {
+  display: grid;
+  grid-template-columns: 2fr repeat(4, 1fr);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.comparisonHeader > div {
+  padding: 0.9rem 1rem;
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.comparisonHeader > div:last-child {
+  border-right: none;
+}
+
+/* Rows */
+.comparisonRow {
+  display: grid;
+  grid-template-columns: 2fr repeat(4, 1fr);
+}
+
+.comparisonRow > div {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.9rem;
+}
+
+.comparisonRow > div:last-child {
+  border-right: none;
+}
+
+/* Feature column */
+.feature {
+  font-weight: 500;
+  background: linear-gradient(
+    90deg,
+    var(--ifm-color-emphasis-100),
+    transparent
+  );
+}
+
+/* Highlight Zustic column */
+.best {
+  font-weight: 600;
+  color: #2e8555;
+  background: linear-gradient(
+    180deg,
+    rgba(46, 133, 85, 0.1),
+    transparent
+  );
+}
+
+/* Hover effect */
+.comparisonRow:hover {
+  background: rgba(46, 133, 85, 0.03);
+}
+
+[data-theme='dark'] .comparisonGrid {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .comparisonHeader {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+[data-theme='dark'] .comparisonRow > div {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .feature {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+}
+
+[data-theme='dark'] .best {
   color: #4db870;
   background: rgba(77, 184, 112, 0.15);
 }
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .demoCard {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .codeSection {
+    border-right: none;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    max-height: 400px;
+  }
+
+  .whyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .demoSection {
+    padding: 60px 0;
+  }
+}
+
 @media (max-width: 768px) {
+  .demoSection {
+    padding: 40px 0;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .demoCard {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .cardHeader {
+    padding: 16px;
+  }
+
   .countValue {
     font-size: 2.5rem;
   }
 
   .buttonGroup {
-    gap: 0.5rem;
+    gap: 8px;
   }
 
   .btn {
-    min-width: 80px;
-    max-width: 100px;
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .codeSection {
+    border-right: none;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    padding: 12px;
+    max-height: 300px;
+  }
+
+  .codeSectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   .whyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .whyCard {
+    padding: 1.2rem;
+  }
+
+  .codeBlock {
+    font-size: 9px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .demoSection {
+    padding: 32px 0;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .demoCard {
+    grid-template-columns: 1fr;
+  }
+
+  .cardHeader {
+    padding: 12px;
+  }
+
+  .countValue {
+    font-size: 2rem;
+  }
+
+  .buttonGroup {
+    gap: 6px;
+  }
+
+  .btn {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .codeSection {
+    padding: 8px;
+    max-height: 250px;
+  }
+
+  .codeSectionHeader {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .copyButton {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .whyCard {
+    padding: 1rem;
+  }
+
+  .demoLive {
+    padding: 16px;
+  }
+
+  .liveContent {
+    gap: 16px;
+  }
+
+  .codeBlock {
+    font-size: 11px;
+  }
+
+  .countValue {
+    font-size: 3rem;
+  }
+
+  .buttonGroup {
+    gap: 8px;
+  }
+
+  .statsBox {
+    grid-template-columns: 1fr;
+  }
+
+  .whyGrid {
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
@@ -462,21 +746,82 @@ html[data-theme='dark'] .best {
 }
 
 @media (max-width: 480px) {
+  .demoSection {
+    padding: 32px 0;
+  }
+
+  .demoCard {
+    grid-template-columns: 1fr;
+  }
+
+  .codeSection {
+    border-right: none;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    padding: 12px;
+    max-height: 300px;
+  }
+
+  .demoLive {
+    padding: 12px;
+  }
+
+  .codeBlock {
+    font-size: 10px;
+  }
+
+  .countValue {
+    font-size: 2.5rem;
+  }
+
   .buttonGroup {
-    flex-direction: column;
+    gap: 6px;
   }
 
   .btn {
-    width: 100%;
-    max-width: none;
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+
+  .statsBox {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 10px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .statValue {
+    font-size: 12px;
   }
 
   .whyGrid {
     grid-template-columns: 1fr;
   }
 
-  .countValue {
-    font-size: 2rem;
+  .comparisonHeader {
+    display: none;
+  }
+
+  .comparisonRow {
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  .comparisonRow > div {
+    display: flex;
+    justify-content: space-between;
+    border-right: none;
+  }
+
+  .comparisonRow > div::before {
+    content: attr(data-label);
+    font-weight: 500;
+    opacity: 0.7;
   }
 }
 

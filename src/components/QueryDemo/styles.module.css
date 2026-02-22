@@ -1,0 +1,256 @@
+.demoCard {
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.cardHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.headerDemo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.cacheBadge,
+.loadingBadge,
+.readyBadge {
+  font-size: 3.5rem;
+  font-weight: 800;
+  display: inline-block;
+  animation: slideDown 0.3s ease-out;
+}
+
+.cacheBadge {
+  color: #2e8555;
+}
+
+.loadingBadge {
+  color: #3b82f6;
+}
+
+.readyBadge {
+  color: #2e8555;
+  font-size: 3.5rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.headerButton {
+  background: linear-gradient(135deg, #2e8555 0%, #29784c 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(46, 133, 85, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.headerButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #35a062 0%, #2e8555 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 133, 85, 0.3);
+}
+
+.headerButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.headerButtonLoading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.codeSection {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  flex: 1;
+}
+
+.sectionLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #2e8555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionLabel::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #2e8555;
+  border-radius: 50%;
+}
+
+.codeSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.copyButton {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  color: #2e8555;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+html[data-theme='dark'] .copyButton {
+  color: #4db870;
+  border-color: rgba(77, 184, 112, 0.3);
+}
+
+.copyButton:hover {
+  background: rgba(46, 133, 85, 0.1);
+  border-color: #2e8555;
+}
+
+html[data-theme='dark'] .copyButton:hover {
+  background: rgba(77, 184, 112, 0.1);
+  border-color: #4db870;
+}
+
+.copyButtonCopied {
+  background: rgba(46, 133, 85, 0.15);
+  border-color: #2e8555;
+  color: #2e8555;
+}
+
+.codeBlock {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 133, 85, 0.3) transparent;
+  flex: 1;
+}
+
+.codeBlock::-webkit-scrollbar {
+  height: 6px;
+}
+
+.codeBlock::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codeBlock::-webkit-scrollbar-thumb {
+  background: rgba(46, 133, 85, 0.3);
+  border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .demoCard {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .demoCard {
+    min-height: auto;
+  }
+
+  .cardHeader {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .cacheBadge,
+  .loadingBadge,
+  .readyBadge {
+    font-size: 2.5rem;
+  }
+
+  .codeSection {
+    padding: 16px;
+    max-height: 300px;
+  }
+
+  .codeBlock {
+    font-size: 10px;
+  }
+
+  .headerButton {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .demoCard {
+    min-height: auto;
+  }
+
+  .cardHeader {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .cacheBadge,
+  .loadingBadge,
+  .readyBadge {
+    font-size: 2rem;
+  }
+
+  .codeSection {
+    padding: 12px;
+    max-height: 250px;
+  }
+
+  .codeBlock {
+    font-size: 9px;
+    line-height: 1.3;
+  }
+
+  .headerButton {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+}

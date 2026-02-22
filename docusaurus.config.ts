@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Zustic - Lightweight State Management Library for React',
-  tagline: 'A lightweight, minimal state management library for React with middleware support',
+  title: 'Zustic - Ultra-Lightweight State Management & Query System',
+  tagline: 'The minimal state management & data fetching library for React. Only ~500B, zero dependencies, TypeScript-first',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

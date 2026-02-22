@@ -4,9 +4,31 @@
   padding: 4rem 2rem;
   width: 100%;
 }
+
 .featuresTitle {
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+}
+
+html[data-theme='dark'] .featuresTitle {
+  color: #ffffff;
+}
+
+.featuresSubtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+html[data-theme='dark'] .featuresSubtitle {
+  color: #b0b0b0;
 }
 
 .featureCol {

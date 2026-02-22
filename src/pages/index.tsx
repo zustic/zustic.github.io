@@ -5,6 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import CounterDemo from '@site/src/components/CounterDemo';
+import QueryDemo from '@site/src/components/QueryDemo';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
@@ -33,18 +34,18 @@ function HomepageHeader() {
               Build Queries Live →
             </Link>
           </div>
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <div className={styles.statValue}>~500B</div>
-              <div className={styles.statLabel}>Bundle Size</div>
+          <div className={styles.trustSection}>
+            <div className={styles.trustItem}>
+              <span className={styles.trustIcon}>✓</span>
+              <span>Production Ready</span>
             </div>
-            <div className={styles.stat}>
-              <div className={styles.statValue}>⚡ Zero</div>
-              <div className={styles.statLabel}>Dependencies</div>
+            <div className={styles.trustItem}>
+              <span className={styles.trustIcon}>✓</span>
+              <span>TypeScript First</span>
             </div>
-            <div className={styles.stat}>
-              <div className={styles.statValue}>🚀 Production</div>
-              <div className={styles.statLabel}>Ready</div>
+            <div className={styles.trustItem}>
+              <span className={styles.trustIcon}>✓</span>
+              <span>Zero Dependencies</span>
             </div>
           </div>
         </div>
@@ -57,8 +58,8 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title} - Lightweight State Management for React`}
-      description="Zustic is a lightweight, minimal state management library for React. Only ~500B gzipped with zero dependencies.">
+      title={`${siteConfig.title} - Lightweight State Management & Query Library for React`}
+      description="Zustic is a lightweight state management & query library for React. Only ~500B gzipped, zero dependencies, TypeScript-first, and production-ready. Perfect for building modern React applications with minimal overhead.">
       <HomepageHeader />
       <main>
         <CounterDemo />

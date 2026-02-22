@@ -11,62 +11,62 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Lightning Fast',
+    title: 'Ultra Lightweight',
     icon: '⚡',
     description: (
       <>
-        Only ~500B gzipped with zero dependencies. Smaller than any other state 
-        management library. Perfect for performance-critical applications.
+        Only ~500B gzipped - 10x smaller than Redux. Smaller than a single HTTP request. 
+        Zero dependencies means no bloat, faster downloads, and minimal impact on your bundle size.
       </>
     ),
   },
   {
-    title: 'Simple to Learn',
+    title: 'Simple API',
     icon: '🎯',
     description: (
       <>
-        Master the entire API in minutes. Just <code>create()</code>, <code>set()</code>, 
-        and <code>get()</code>. No complex patterns, no boilerplate required.
+        Three functions to master: <code>create()</code>, <code>set()</code>, <code>get()</code>. 
+        No complex patterns, no boilerplate. Learn in minutes, not days.
       </>
     ),
   },
   {
-    title: 'Type Safe',
+    title: 'TypeScript Native',
     icon: '💾',
     description: (
       <>
-        First-class TypeScript support with automatic type inference. Write type-safe 
-        code with full IDE autocomplete and zero configuration.
+        Full TypeScript support with automatic type inference. Perfect autocomplete, 
+        zero configuration. Works perfectly with React's hooks.
       </>
     ),
   },
   {
-    title: 'Multi-Platform',
-    icon: '📱',
+    title: 'Data Fetching Built-in',
+    icon: '�',
     description: (
       <>
-        Works seamlessly across React, React Native, Next.js, and more. One API for 
-        all your state management needs across platforms.
+        Query system with automatic caching, mutation support, and smart cache invalidation. 
+        Handle both state and data fetching with one library.
       </>
     ),
   },
   {
-    title: 'Extensible',
+    title: 'Extensible & Flexible',
     icon: '🧩',
     description: (
       <>
-        Built-in middleware system for logging, persistence, validation, and custom 
-        logic. Extend without modifying your store code.
+        Middleware support for logging, persistence, validation, and custom logic. 
+        Extend without modifying store code. Works everywhere React runs.
       </>
     ),
   },
   {
-    title: 'Production Ready',
+    title: 'Battle-Tested',
     icon: '🚀',
     description: (
       <>
-        Optimized for performance with <code>useSyncExternalStore</code>. Used in 
-        real applications - fully tested and battle-hardened.
+        Used in production applications. Optimized with <code>useSyncExternalStore</code>. 
+        Fully tested, documented, and actively maintained.
       </>
     ),
   },
@@ -88,9 +88,12 @@ export default function HomepageFeatures(): ReactNode {
   return (
     <section className={styles.features}>
       <div className="container">
-         <Heading as="h3" className={styles.featuresTitle}>
-            What zustic provide
-          </Heading>
+        <Heading as="h2" className={styles.featuresTitle}>
+          Why Choose Zustic?
+        </Heading>
+        <p className={styles.featuresSubtitle}>
+          The best choice for React developers who want simplicity, performance, and elegance.
+        </p>
         <div className="row">
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
