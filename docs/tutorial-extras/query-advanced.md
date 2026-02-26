@@ -389,11 +389,25 @@ Follow these patterns to build robust, performant applications.
 - Don't pass `undefined` as query arguments
 - Don't ignore error states in UI
 
-## Manual Query Data Updates
+## Cache Management Utilities
 
-Update cached query data programmatically without refetching, enabling optimistic updates, real-time synchronization, and complex state mutations. The `updateQueryData` utility provides direct access to mutate cached data.
+Zustic Query provides powerful utility functions for advanced cache manipulation, enabling optimistic updates, tag-based invalidation, and programmatic cache control.
 
-### Updating Query Cache
+### updateQueryData - Optimistic Updates
+
+Update cached query data programmatically without refetching. Perfect for optimistic updates where you update the cache immediately while mutations are in flight.
+
+```tsx
+/**
+ * Updates cached query data for a specific endpoint and arguments.
+ * 
+ * Useful for optimistic updates or manual cache manipulation.
+ * The updater function receives the current data and should return the updated data.
+ */
+api.utils.updateQueryData(key: string, arg: any, updater: (data: any) => any): void
+```
+
+#### Optimistic Update Example
 
 ```tsx
 export function UpdateUserEmail() {
@@ -402,20 +416,19 @@ export function UpdateUserEmail() {
   
   const handleSubmit = async () => {
     try {
-      const result = await updateUser({ email }).unwrap()
+      // Optimistically update cache
+      api.utils.updateQueryData('getUser', { id: 1 }, (draft) => ({
+        ...draft,
+        email: email
+      }))
       
-      // Manually update the cached query data
-      api.utils.updateQueryData('getUser', { page: 1, limit: 10 }, (draft) => {
-        draft = draft.map(d => ({
-          ...d,
-          email: email
-        }))
-        return draft
-      })
+      // Then mutate on server
+      const result = await updateUser({ id: 1, email })
       
       setEmail('')
     } catch (error) {
       console.error('Failed to update:', error)
+      // Cache will be refetched on error
     }
   }
 
@@ -432,9 +445,9 @@ export function UpdateUserEmail() {
 }
 ```
 
-### Bulk Data Mutations
+#### Bulk Cache Operations
 
-Transform entire dataset with complex logic:
+Transform entire cached datasets with complex logic:
 
 ```tsx
 // Remove user from cached list
@@ -442,7 +455,7 @@ api.utils.updateQueryData('getUsers', undefined, (draft) => {
   return draft.filter(user => user.id !== userId)
 })
 
-// Sort cached users
+// Sort cached users alphabetically
 api.utils.updateQueryData('getUsers', undefined, (draft) => {
   draft.sort((a, b) => a.name.localeCompare(b.name))
   return draft
@@ -453,4 +466,325 @@ api.utils.updateQueryData('getUsers', undefined, (draft) => {
   draft.push(newUser)
   return draft
 })
+
+// Map and transform cached data
+api.utils.updateQueryData('getUserPosts', { userId: 1 }, (draft) => {
+  return draft.map(post => ({
+    ...post,
+    edited: true,
+    updatedAt: new Date().toISOString()
+  }))
+})
+```
+
+### invalidateTags - Tag-Based Cache Invalidation
+
+Invalidate cached queries by tag names. This is essential after mutations when you want to refresh all related data without knowing specific cache keys.
+
+```tsx
+/**
+ * Invalidates cached queries by tag names.
+ * 
+ * Clears the cache for all endpoints whose providesTags match the provided tags.
+ * Supports both simple string tags and object tags with specific IDs.
+ */
+api.utils.invalidateTags(tags?: (string | {type: string; id?: string | number})[]): void
+```
+
+#### Invalidate All Related Data After Mutation
+
+```tsx
+export function CreateUserForm() {
+  const [name, setName] = useState('')
+  const { mutate: createUser } = useCreateUserMutation()
+
+  const handleSubmit = async () => {
+    try {
+      const newUser = await createUser({ name })
+      
+      // Invalidate all 'users' related cache
+      // This triggers refetch for all queries that provide 'users' tag
+      api.utils.invalidateTags(['users'])
+      
+      setName('')
+    } catch (error) {
+      console.error('Failed to create user:', error)
+    }
+  }
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      handleSubmit()
+    }}>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="User name"
+      />
+      <button type="submit">Create User</button>
+    </form>
+  )
+}
+```
+
+#### Invalidate Specific Items with ID Tags
+
+```tsx
+export function DeleteUserButton({ userId }: { userId: number }) {
+  const { mutate: deleteUser } = useDeleteUserMutation()
+
+  const handleDelete = async () => {
+    try {
+      await deleteUser(userId)
+      
+      // Invalidate the specific user and all their posts
+      api.utils.invalidateTags([
+        { type: 'users', id: userId },
+        { type: 'posts', id: userId }
+      ])
+    } catch (error) {
+      console.error('Failed to delete user:', error)
+    }
+  }
+
+  return <button onClick={handleDelete}>Delete User</button>
+}
+```
+
+#### Multiple Tag Invalidation After Complex Mutations
+
+```tsx
+export function TransferOwnershipForm() {
+  const { mutate: transferOwnership } = useTransferOwnershipMutation()
+
+  const handleTransfer = async (postId: number, newOwnerId: number) => {
+    try {
+      await transferOwnership({ postId, newOwnerId })
+      
+      // Invalidate multiple related caches
+      api.utils.invalidateTags([
+        { type: 'posts', id: postId },
+        { type: 'userPosts', id: newOwnerId },
+        'posts' // Refresh all posts
+      ])
+    } catch (error) {
+      console.error('Failed to transfer:', error)
+    }
+  }
+
+  return (
+    // ... form UI
+  )
+}
+```
+
+### resetApiState - Full Cache Reset
+
+Completely reset the API state by clearing all cached data and refetching active queries. Useful for scenarios like user logout or resetting application state.
+
+```tsx
+/**
+ * Resets the entire API state by clearing the cache for all queries.
+ * 
+ * This function iterates through all cached queries and clears their cache,
+ * which effectively resets all cached data. Useful for user logout or app reset.
+ */
+api.utils.resetApiState(): void
+```
+
+#### Reset on Logout
+
+```tsx
+export function LogoutButton() {
+  const handleLogout = async () => {
+    try {
+      // Clear auth token from storage
+      localStorage.removeItem('authToken')
+      
+      // Reset entire API state
+      // Clears all sensitive user data from cache
+      api.utils.resetApiState()
+      
+      // Redirect to login
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
+
+  return (
+    <button onClick={handleLogout} className="logout-btn">
+      Logout
+    </button>
+  )
+}
+```
+
+#### Reset on Permission Change
+
+```tsx
+export function PermissionGuard({ requiredPermission, children }: any) {
+  const [hasPermission, setHasPermission] = useState(false)
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      try {
+        const result = await api.getPermissions()
+        const allowed = result.permissions.includes(requiredPermission)
+        
+        if (!allowed) {
+          // User lost permission - clear all cached data
+          api.utils.resetApiState()
+          setHasPermission(false)
+          return
+        }
+        
+        setHasPermission(true)
+      } catch (error) {
+        api.utils.resetApiState()
+        setHasPermission(false)
+      }
+    }
+
+    checkPermission()
+  }, [requiredPermission])
+
+  return hasPermission ? children : <AccessDenied />
+}
+```
+
+### refetchQuery - Single Query Refresh
+
+Manually refetch a specific query, bypassing cache and forcing fresh data. Useful for explicit refresh buttons or after certain user actions.
+
+```tsx
+/**
+ * Clears cache and refetches a specific query by endpoint key and arguments.
+ * 
+ * Useful when you want to refresh a single query without affecting others.
+ * Always bypasses cache and fetches fresh data.
+ */
+api.utils.refetchQuery(key: string, arg: any): void
+```
+
+#### Manual Refresh Button
+
+```tsx
+export function UsersList() {
+  const { data: users, isLoading } = useGetUsersQuery()
+
+  const handleRefresh = () => {
+    // Refetch only this specific query
+    api.utils.refetchQuery('getUsers', undefined)
+  }
+
+  return (
+    <div>
+      <button onClick={handleRefresh} disabled={isLoading}>
+        {isLoading ? 'Refreshing...' : '🔄 Refresh Users'}
+      </button>
+      <ul>
+        {users?.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+#### Selective Query Refresh
+
+```tsx
+export function Dashboard() {
+  const { data: stats } = useGetStatsQuery()
+  const { data: users } = useGetUsersQuery()
+  
+  const handleStatsRefresh = () => {
+    // Only refresh stats, don't touch users cache
+    api.utils.refetchQuery('getStats', undefined)
+  }
+
+  const handleUsersRefresh = () => {
+    // Only refresh users with specific filter
+    api.utils.refetchQuery('getUsers', { role: 'admin' })
+  }
+
+  return (
+    <div>
+      <section>
+        <button onClick={handleStatsRefresh}>Refresh Stats</button>
+        <Stats data={stats} />
+      </section>
+      <section>
+        <button onClick={handleUsersRefresh}>Refresh Admin Users</button>
+        <UsersList data={users} />
+      </section>
+    </div>
+  )
+}
+```
+
+#### Conditional Auto-Refresh
+
+```tsx
+export function RealTimeStats() {
+  const { data: stats, isLoading } = useGetStatsQuery()
+
+  // Auto-refresh specific query every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      api.utils.refetchQuery('getStats', undefined)
+    }, 30 * 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div>
+      <div>Last updated: {stats?.timestamp}</div>
+      <Stats data={stats} loading={isLoading} />
+    </div>
+  )
+}
+```
+
+## Combining Multiple Utilities
+
+These utilities work together for powerful cache management patterns:
+
+```tsx
+export function ComplexMutationFlow() {
+  const { mutate: createPost } = useCreatePostMutation()
+
+  const handleCreatePost = async (title: string, content: string) => {
+    try {
+      // 1. Optimistically update lists
+      api.utils.updateQueryData('getPosts', undefined, (draft) => [
+        ...draft,
+        { id: 'tmp', title, content, status: 'pending' }
+      ])
+
+      // 2. Perform mutation
+      const post = await createPost({ title, content })
+
+      // 3. Clean up optimistic data and refetch
+      api.utils.refetchQuery('getPosts', undefined)
+
+      // 4. Invalidate related caches
+      api.utils.invalidateTags([
+        { type: 'posts', id: post.id },
+        'postCount'
+      ])
+    } catch (error) {
+      // On error, invalidate to get fresh data
+      api.utils.invalidateTags(['posts'])
+    }
+  }
+
+  return (
+    // ... form UI
+  )
+}
 ```

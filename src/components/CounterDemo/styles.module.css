@@ -743,16 +743,6 @@ html[data-theme='dark'] .comparisonGrid {
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
   }
-}
-
-@media (max-width: 480px) {
-  .demoSection {
-    padding: 32px 0;
-  }
-
-  .demoCard {
-    grid-template-columns: 1fr;
-  }
 
   .codeSection {
     border-right: none;
@@ -765,28 +755,6 @@ html[data-theme='dark'] .comparisonGrid {
     padding: 12px;
   }
 
-  .codeBlock {
-    font-size: 10px;
-  }
-
-  .countValue {
-    font-size: 2.5rem;
-  }
-
-  .buttonGroup {
-    gap: 6px;
-  }
-
-  .btn {
-    padding: 10px 14px;
-    font-size: 16px;
-  }
-
-  .statsBox {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
   .stat {
     padding: 10px;
   }
@@ -797,10 +765,6 @@ html[data-theme='dark'] .comparisonGrid {
 
   .statValue {
     font-size: 12px;
-  }
-
-  .whyGrid {
-    grid-template-columns: 1fr;
   }
 
   .comparisonHeader {

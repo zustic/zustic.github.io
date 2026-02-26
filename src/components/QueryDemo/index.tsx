@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import { themes, Highlight } from 'prism-react-renderer';
 import { useColorMode } from '@docusaurus/theme-common';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 
 interface Post {
   id: number;
@@ -14,7 +13,6 @@ interface Post {
 function QueryDemoContent() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [cacheHit, setCacheHit] = useState(false);
   const [copied, setCopied] = useState(false);
   const colorMode = useColorMode();
@@ -32,7 +30,6 @@ function QueryDemoContent() {
     }
 
     setLoading(true);
-    setError(null);
     setCacheHit(false);
 
     try {
@@ -45,7 +42,8 @@ function QueryDemoContent() {
       
       setPosts(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error');
+      console.log(err);
+      
     } finally {
       setLoading(false);
     }
@@ -149,9 +147,5 @@ export const { useGetUsersQuery, useCreateUserMutation } = api`;
 }
 
 export default function QueryDemo() {
-  return (
-    <BrowserOnly>
-      {() => <QueryDemoContent />}
-    </BrowserOnly>
-  );
+  return <QueryDemoContent />
 }
