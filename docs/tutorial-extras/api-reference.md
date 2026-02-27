@@ -485,26 +485,55 @@ const useThemeStore = create((set) => ({
 ### Form State
 
 ```typescript
-const useFormStore = create((set) => ({
-  values: { email: '', password: '' },
-  errors: {} as Record<string, string>,
+const useForm = create<FormStore>((set, get) => ({
+ email: {
+    value: '',
+    error: null,
+    required: { value: true, message: 'Email is required' },
+  },
+  password: {
+    value: '',
+    error: null,
+    required: { value: true, message: 'Password is required' },
+  },
+  validateField: (field) => {
+    set((state) => {
+      const fieldState = state[field]
 
-  setField: (field: string, value: string) =>
-    set((state) => ({
-      values: { ...state.values, [field]: value },
-    })),
+      let error: string | null = null
 
-  setError: (field: string, error: string) =>
-    set((state) => ({
-      errors: { ...state.errors, [field]: error },
-    })),
+      // check required
+      if (fieldState.required?.value && !fieldState.value) {
+        error = fieldState.required.message
+      }else{
+        error = null
+      }
 
-  reset: () =>
-    set({
-      values: { email: '', password: '' },
-      errors: {},
-    }),
-}));
+      return {
+        [field]: {
+          ...fieldState,
+          error,
+        },
+      }
+    })
+  },
+  handleSubmit: (cb)=> (e) => {
+    e.preventDefault()
+    get().validateField('email')
+    get().validateField('password')
+    
+    const emailError = get().email.error
+    const passwordError = get().password.error   
+
+    if(!emailError && !passwordError) {
+      cb({
+        email: get().email.value,
+        password: get().password.value,
+      })
+    }
+  }
+}))
+
 ```
 
 ## Troubleshooting
