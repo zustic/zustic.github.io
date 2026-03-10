@@ -241,6 +241,10 @@ const config: Config = {
               label: 'Query builder',
               href:'https://zustic.github.io/query-builder'
             },
+            {
+              label: 'JSON to Typescript type',
+              href:'https://transform.tools/json-to-typescript'
+            },
           ],
         },
       ],

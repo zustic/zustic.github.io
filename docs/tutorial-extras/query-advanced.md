@@ -395,40 +395,73 @@ Zustic Query provides powerful utility functions for advanced cache manipulation
 
 ### updateQueryData - Optimistic Updates
 
-Update cached query data programmatically without refetching. Perfect for optimistic updates where you update the cache immediately while mutations are in flight.
+Manually update query cache data with optimistic updates. Perfect for optimistic updates where you update the cache immediately while mutations are in flight.
 
-```tsx
+```typescript
 /**
- * Updates cached query data for a specific endpoint and arguments.
+ * Manually update query cache data with optimistic updates.
  * 
- * Useful for optimistic updates or manual cache manipulation.
- * The updater function receives the current data and should return the updated data.
+ * @example
+ * ```typescript
+ * const undo = api.utils.updateQueryData('getUser', {id: 1}, (draft) => {
+ *   draft.name = 'Updated Name';
+ * });
+ * 
+ * // If something goes wrong, undo the changes
+ * undo?.();
+ * ```
  */
-api.utils.updateQueryData(key: string, arg: any, updater: (data: any) => any): void
+api.utils.updateQueryData: <K extends QueryKeys<T>>(
+  key: K,
+  arg: InferQueryArg<T[K]>,
+  updater: (data: InferQueryResult<T[K]>) => InferQueryResult<T[K]>
+) => UpdateQueryPatchResult | undefined
 ```
 
-#### Optimistic Update Example
+**Returns:** `UpdateQueryPatchResult | undefined`
+
+```typescript
+export type UpdateQueryPatchResult = {
+  /**
+   * Reverts the cache back to its previous state.
+   * Useful for rolling back optimistic updates when a request fails.
+   */
+  undo: () => void;
+};
+```
+
+#### Optimistic Update with Undo Example
+
+The most common pattern: update cache immediately, rollback on error.
 
 ```tsx
 export function UpdateUserEmail() {
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
   const { mutate: updateUser } = useUpdateUserMutation()
   
   const handleSubmit = async () => {
+    setLoading(true)
+    
     try {
-      // Optimistically update cache
-      api.utils.updateQueryData('getUser', { id: 1 }, (draft) => ({
-        ...draft,
-        email: email
-      }))
+      // Store undo function for rollback
+      const res = api.utils.updateQueryData('getUser', { id: 1 }, (draft) => {
+        draft.email = email
+      })
       
-      // Then mutate on server
+      // Send to server
       const result = await updateUser({ id: 1, email })
       
       setEmail('')
+      alert('Email updated successfully!')
     } catch (error) {
       console.error('Failed to update:', error)
-      // Cache will be refetched on error
+      
+      // Rollback the optimistic update on error
+      res?.undo()
+      alert('Failed to update email. Changes reverted.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -438,8 +471,251 @@ export function UpdateUserEmail() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="New email"
+        disabled={loading}
       />
-      <button onClick={handleSubmit}>Update Email</button>
+      <button onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Updating...' : 'Update Email'}
+      </button>
+    </div>
+  )
+}
+```
+
+#### Pessimistic Update Pattern
+
+Update server first, then update cache only on success.
+
+```tsx
+export function UpdateUserEmailPessimistic() {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { mutate: updateUser } = useUpdateUserMutation()
+  
+  const handleSubmit = async () => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      // Mutate on server first
+      const result = await updateUser({ id: 1, email })
+      
+      // Only update cache after server confirms
+      if (result.success) {
+        api.utils.updateQueryData('getUser', { id: 1 }, (draft) => {
+          draft.email = email
+        })
+        
+        setEmail('')
+        alert('Email updated successfully!')
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Update failed'
+      setError(errorMessage)
+      console.error('Failed to update:', err)
+      // Cache is NOT updated on error, data stays accurate
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div>
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="New email"
+        disabled={loading}
+      />
+      <button onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Updating...' : 'Update Email'}
+      </button>
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+    </div>
+  )
+}
+```
+
+#### Comparing Optimistic vs Pessimistic
+
+| Aspect | Optimistic | Pessimistic |
+|--------|-----------|-------------|
+| **UX** | Instant feedback | Delayed feedback |
+| **Cache Update** | Immediately | After server confirmation |
+| **Undo Needed** | Yes (on error) | No |
+| **Best For** | Fast, reliable connections | Critical data, slow connections |
+| **Complexity** | Higher | Lower |
+
+---
+
+### Advanced: Conditional Undo
+
+Sometimes you want to undo only specific changes:
+
+```tsx
+export function ComplexUpdateExample() {
+  const { mutate: updateUser } = useUpdateUserMutation()
+  
+  const handleUpdate = async (updates: Partial<User>) => {
+    // Store original data before update
+    const originalData = api.utils.getApiDraftData('getUser', { id: 1 })
+    
+    // Optimistically update
+    const res = api.utils.updateQueryData('getUser', { id: 1 }, (draft) => {
+     return Object.assign(draft, updates)
+    })
+    
+    try {
+      await updateUser({ id: 1, ...updates })
+      console.log('Update successful')
+    } catch (error) {
+      console.error('Update failed:', error)
+      
+      // Revert changes
+      res?.undo()
+
+      // Alternative: manually restore specific fields
+      // api.utils.updateQueryData('getUser', { id: 1 }, (draft) => {
+      //   draft.email = originalData?.email
+      //   draft.name = originalData?.name
+      // })
+    }
+  }
+  
+  return (
+    <button onClick={() => handleUpdate({ email: 'new@example.com' })}>
+      Update Email
+    </button>
+  )
+}
+```
+
+---
+
+#### Bulk Cache Operations
+
+Transform entire cached datasets with complex logic:
+
+```tsx
+// Remove user from cached list
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  return draft.filter(user => user.id !== userId)
+})
+
+// Sort cached users alphabetically
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  draft.sort((a, b) => a.name.localeCompare(b.name))
+  return draft
+})
+
+// Add new item to cached list
+api.utils.updateQueryData('getUsers', undefined, (draft) => {
+  draft.push(newUser)
+  return draft
+})
+
+// Map and transform cached data
+api.utils.updateQueryData('getUserPosts', { userId: 1 }, (draft) => {
+  return draft.map(post => ({
+    ...post,
+    edited: true,
+    updatedAt: new Date().toISOString()
+  }))
+})
+```
+
+### getApiDraftData - Read Cached Query Data
+
+Retrieves cached query data for a specific endpoint and arguments without triggering a new request.
+
+```typescript
+/**
+ * Retrieves cached query data for a specific endpoint and arguments.
+ *
+ * Useful when you need to read the current cached state of a query
+ * without triggering a new request.
+ *
+ * @template K - The endpoint key
+ * @param key - The endpoint name (e.g., 'getUser', 'getPosts')
+ * @param arg - The arguments used when calling the endpoint
+ * @returns The cached query data if available, otherwise `undefined`
+ *
+ * @example
+ * ```typescript
+ * const user = api.utils.getApiDraftData('getUser', { id: 1 });
+ *
+ * if (user) {
+ *   console.log(user.name);
+ * }
+ * ```
+ */
+api.utils.getApiDraftData: <K extends QueryKeys<T>> (
+  key: K,
+  arg: InferQueryArg<T[K]>
+) => InferQueryResult<T[K]> | undefined
+```
+
+**Returns:** `InferQueryResult<T[K]> | undefined` - The cached data or undefined if not cached
+
+#### Reading Cached Data Example
+
+```tsx
+export function UserProfile({ userId }: { userId: number }) {
+  const { data: user } = useGetUserQuery({ id: userId })
+
+  const handleShowCachedData = () => {
+    // Read from cache without making a request
+    const cachedUser = api.utils.getApiDraftData('getUser', { id: userId })
+    
+    if (cachedUser) {
+      console.log('Cached user:', cachedUser.name)
+      alert(`User: ${cachedUser.name}`)
+    } else {
+      alert('No cached data available')
+    }
+  }
+
+  return (
+    <div>
+      <h1>{user?.name}</h1>
+      <button onClick={handleShowCachedData}>
+        Show Cached Data
+      </button>
+    </div>
+  )
+}
+```
+
+#### Pre-fetching Data Check
+
+```tsx
+export function UsersList() {
+  const { data: users } = useGetUsersQuery()
+
+  const handlePrefetchUser = async (userId: number) => {
+    // Check if user data is already cached
+    const cached = api.utils.getApiDraftData('getUser', { id: userId })
+    
+    if (cached) {
+      // Data is already cached, no need to fetch
+      console.log('Data already available:', cached)
+      return
+    }
+    
+    // Data not cached, trigger a fetch
+    await api.endpoints.getUser.initiate({ id: userId })
+  }
+
+  return (
+    <div>
+      {users?.map(user => (
+        <button
+          key={user.id}
+          onClick={() => handlePrefetchUser(user.id)}
+        >
+          Load {user.name}
+        </button>
+      ))}
     </div>
   )
 }
