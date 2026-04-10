@@ -173,6 +173,51 @@ html[data-theme='dark'] .trustIcon {
   background: rgba(77, 184, 112, 0.15);
 }
 
+.librariesSection {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 3rem 0 2rem 0;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(46, 133, 85, 0.1);
+  border-bottom: 1px solid rgba(46, 133, 85, 0.1);
+}
+
+.libraryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.libraryIcon {
+  font-size: 2.5rem;
+  display: block;
+  line-height: 1;
+}
+
+.libraryName {
+  font-weight: 600;
+  color: #2e8555;
+  font-size: 0.95rem;
+}
+
+html[data-theme='dark'] .libraryName {
+  color: #4db870;
+}
+
+.librarySize {
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 500;
+}
+
+html[data-theme='dark'] .librarySize {
+  color: #777;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 4rem 1.5rem 2.5rem;
@@ -192,11 +237,18 @@ html[data-theme='dark'] .trustIcon {
     margin: 1.5rem 0 2rem 0;
   }
 
+  .librariesSection {
+    gap: 2rem;
+    margin: 2.5rem 0 1.5rem 0;
+    padding: 1.5rem 0;
+  }
+
   .trustSection {
     gap: 1.5rem;
     margin-top: 2rem;
     padding-top: 1.5rem;
   }
+
 
   .trustItem {
     font-size: 0.9rem;
@@ -228,6 +280,24 @@ html[data-theme='dark'] .trustIcon {
     flex-direction: column;
     gap: 0.8rem;
     margin: 1.2rem 0 1.5rem 0;
+  }
+
+  .librariesSection {
+    gap: 1.5rem;
+    margin: 2rem 0 1rem 0;
+    padding: 1rem 0;
+  }
+
+  .libraryIcon {
+    font-size: 2rem;
+  }
+
+  .libraryName {
+    font-size: 0.9rem;
+  }
+
+  .librarySize {
+    font-size: 0.75rem;
   }
 
   .buttonPrimary,

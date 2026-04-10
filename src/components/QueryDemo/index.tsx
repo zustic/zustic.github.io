@@ -72,7 +72,7 @@ const api = createApi({
   cacheTimeout: 5 * 60 * 1000,
   endpoints: (builder) => ({
     getUsers: builder.query({
-      query: () => ({ url: '/users' })
+      query: () => '/users'
     }),
     createUser: builder.mutation({
       query: (user) => ({ url: '/users', method: 'POST', body: user })

@@ -47,6 +47,27 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'I18n API',
+      items: [
+        'tutorial-extras/i18n-getting-started',
+        'tutorial-extras/i18n-api-reference',
+        'tutorial-extras/i18n-examples',
+        'tutorial-extras/i18n-advanced',
+        'tutorial-extras/i18n-best-practices',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Hook Form API',
+      items: [
+        'tutorial-extras/hook-form-getting-started',
+        'tutorial-extras/hook-form-api-reference',
+        'tutorial-extras/hook-form-examples',
+        'tutorial-extras/hook-form-advanced',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Resources',
       items: [
         'tutorial-extras/comparison',

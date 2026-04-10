@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
+import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
@@ -7,80 +7,99 @@ type FeatureItem = {
   title: string;
   icon: string;
   description: ReactNode;
+  library: string;
+  link: string;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Ultra Lightweight',
-    icon: '⚡',
+    title: 'State Management',
+    icon: '⚛️',
+    library: 'zustic',
+    link: '/docs/intro',
     description: (
       <>
-        Only ~500B gzipped - 10x smaller than Redux. Smaller than a single HTTP request. 
-        Zero dependencies means no bloat, faster downloads, and minimal impact on your bundle size.
+        Ultra-lightweight core state management (~500B gzipped). Master with three functions: 
+        <code>create()</code>, <code>set()</code>, <code>get()</code>. No boilerplate, 
+        full TypeScript support, and optimized with <code>useSyncExternalStore</code>.
       </>
     ),
   },
   {
-    title: 'Simple API',
-    icon: '🎯',
+    title: 'Server State & Caching',
+    icon: '🔄',
+    library: 'zustic/query',
+    link: '/docs/tutorial-extras/query-getting-started',
     description: (
       <>
-        Three functions to master: <code>create()</code>, <code>set()</code>, <code>get()</code>. 
-        No complex patterns, no boilerplate. Learn in minutes, not days.
+        Intelligent data fetching with automatic caching, deduplication, and smart invalidation. 
+        Auto-generated hooks, middleware pipelines, and plugin system for complete control 
+        over your API layer.
       </>
     ),
   },
   {
-    title: 'TypeScript Native',
-    icon: '💾',
+    title: 'Form Validation',
+    icon: '📝',
+    library: 'zustic/hook-form',
+    link: '/docs/tutorial-extras/hook-form-getting-started',
     description: (
       <>
-        Full TypeScript support with automatic type inference. Perfect autocomplete, 
-        zero configuration. Works perfectly with React's hooks.
+        Type-safe form management with built-in validation. Supports Zod, Yup, and custom rules. 
+        Zero boilerplate field state management with automatic error tracking and recovery (~3KB gzipped).
       </>
     ),
   },
   {
-    title: 'Data Fetching Built-in',
-    icon: '�',
+    title: 'Internationalization',
+    icon: '🌍',
+    library: 'zustic/i18n',
+    link: '/docs/tutorial-extras/i18n-getting-started',
     description: (
       <>
-        Query system with automatic caching, mutation support, and smart cache invalidation. 
-        Handle both state and data fetching with one library.
+        Multi-language support with type-safe translations and automatic locale switching. 
+        Dot-notation keys, async loading, efficient state management, and seamless language transitions (~2KB gzipped).
       </>
     ),
   },
   {
-    title: 'Extensible & Flexible',
-    icon: '🧩',
+    title: 'Middleware & Extensions',
+    icon: '🔌',
+    library: 'all libraries',
+    link: '/docs/tutorial-extras/best-practices',
     description: (
       <>
-        Middleware support for logging, persistence, validation, and custom logic. 
-        Extend without modifying store code. Works everywhere React runs.
+        Extend functionality with logging, persistence, validation, and custom logic across all libraries. 
+        Framework-agnostic middleware system that works everywhere React runs.
       </>
     ),
   },
   {
-    title: 'Battle-Tested',
+    title: 'Production Ready',
     icon: '🚀',
+    library: 'ecosystem',
+    link: '/docs/intro',
     description: (
       <>
-        Used in production applications. Optimized with <code>useSyncExternalStore</code>. 
-        Fully tested, documented, and actively maintained.
+        Battle-tested ecosystem with zero external dependencies. Fully typed, well-documented, 
+        actively maintained, and optimized for performance. Perfect for any React application.
       </>
     ),
   },
 ];
 
-function Feature({title, icon, description}: FeatureItem) {
+function Feature({title, icon, description, library, link}: FeatureItem) {
   return (
-    <div className={clsx('col col--4', styles.featureCol)}>
-      <div className={styles.featureCard}>
-        <div className={styles.featureIcon}>{icon}</div>
-        <Heading as="h3" className={styles.featureTitle}>{title}</Heading>
-        <p className={styles.featureDescription}>{description}</p>
+    <Link to={link}>
+      <div className={styles.whyCard}>
+        <div className={styles.featureCard}>
+          <div className={styles.featureIcon}>{icon}</div>
+          <Heading as="h3" className={styles.featureTitle}>{title}</Heading>
+          <span className={styles.libraryBadge}>{library}</span>
+          <p className={styles.featureDescription}>{description}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -89,12 +108,12 @@ export default function HomepageFeatures(): ReactNode {
     <section className={styles.features}>
       <div className="container">
         <Heading as="h2" className={styles.featuresTitle}>
-          Why Choose Zustic?
+          Complete React Ecosystem
         </Heading>
         <p className={styles.featuresSubtitle}>
-          The best choice for React developers who want simplicity, performance, and elegance.
+          Four lightweight, production-ready libraries for state management, data fetching, forms, and internationalization.
         </p>
-        <div className="row">
+        <div className={styles.whyGrid}>
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}

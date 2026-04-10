@@ -226,9 +226,357 @@ const api = createApi({
 })
 ```
 
+## Query Lifecycle Hooks - `onQueryStarted`
+
+Handle asynchronous operations and side effects that occur at query execution time using the `onQueryStarted` lifecycle hook. This powerful feature enables optimistic updates, error handling, and request coordination.
+
+### What is `onQueryStarted`?
+
+The `onQueryStarted` lifecycle hook is called when a query execution begins, before the data fetch completes. It provides access to:
+
+- **arg**: The arguments passed to the query
+- **queryFulfilled**: A Promise that resolves with the query result or rejects with an error
+
+### Hook Signature
+
+```typescript
+interface QueryEndpoint {
+  onQueryStarted?: (
+    arg: any,
+    { queryFulfilled }: { queryFulfilled: Promise<{ data: any }> }
+  ) => void | Promise<void>
+}
+```
+
+### Basic Usage
+
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    updateUser: builder.mutation({
+      query: (user) => ({ 
+        url: `/users/${user.id}`, 
+        method: 'PATCH',
+        body: user 
+      }),
+      
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          // Wait for the query to complete
+          const { data } = await queryFulfilled;
+          console.log('Update successful:', data);
+        } catch (error) {
+          console.error('Update failed:', error);
+        }
+      }
+    })
+  })
+})
+```
+
+### Optimistic Update Pattern
+
+Apply changes immediately to the UI while the request is in flight, then revert on error:
+
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    updatePost: builder.mutation({
+      query: (post) => ({ 
+        url: `/posts/${post.id}`, 
+        method: 'PATCH',
+        body: post 
+      }),
+      
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        // Optimistically update the cache
+        const patchResult = api.util.updateQueryData(
+          'getPost', 
+          arg.id, 
+          (draft) => {
+            Object.assign(draft, arg);
+          }
+        );
+        
+        try {
+          // Wait for server confirmation
+          await queryFulfilled;
+          console.log('Post updated successfully');
+        } catch (error) {
+          // Revert the optimistic update on error
+          patchResult.undo();
+          console.error('Failed to update post:', error);
+        }
+      }
+    })
+  })
+})
+```
+
+### Coordinating Multiple Requests
+
+Synchronize multiple queries or mutations using `onQueryStarted`:
+
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    createPost: builder.mutation({
+      query: (post) => ({ 
+        url: '/posts', 
+        method: 'POST',
+        body: post 
+      }),
+      
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          const { data: newPost } = await queryFulfilled;
+          
+          // Invalidate related caches
+          api.util.invalidateTags(['postsList']);
+          
+          // Update other queries with new data
+          api.util.updateQueryData('getPosts', undefined, (draft) => {
+            draft.push(newPost);
+          });
+          
+          console.log('Post created:', newPost.id);
+        } catch (error) {
+          console.error('Failed to create post:', error);
+        }
+      }
+    })
+  })
+})
+```
+
+### Error Recovery with `onQueryStarted`
+
+Implement automatic error recovery strategies:
+
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    deletePost: builder.mutation({
+      query: (postId) => ({ 
+        url: `/posts/${postId}`, 
+        method: 'DELETE'
+      }),
+      
+      onQueryStarted: async (postId, { queryFulfilled }) => {
+        // Store previous state for rollback
+        const previousPosts = useGetPostsQuery().data;
+        
+        // Optimistically remove from UI
+        api.util.updateQueryData('getPosts', undefined, (draft) => {
+          return draft.filter(p => p.id !== postId);
+        });
+        
+        try {
+          await queryFulfilled;
+          console.log('Post deleted successfully');
+        } catch (error) {
+          // Restore previous state on error
+          if (previousPosts) {
+            api.util.updateQueryData('getPosts', undefined, () => previousPosts);
+          }
+          console.error('Failed to delete post:', error);
+        }
+      }
+    })
+  })
+})
+```
+
+### Abort/Cancel Request Handling
+
+Handle request cancellation within `onQueryStarted`:
+
+```typescript
+let abortController: AbortController | null = null;
+
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    searchUsers: builder.query({
+      query: (searchTerm) => ({ 
+        url: '/users/search',
+        params: { q: searchTerm },
+        signal: abortController?.signal
+      }),
+      
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        // Cancel previous search
+        abortController?.abort();
+        abortController = new AbortController();
+        
+        try {
+          const { data } = await queryFulfilled;
+          console.log('Found users:', data);
+        } catch (error) {
+          if (error?.name === 'AbortError') {
+            console.log('Search cancelled');
+          } else {
+            console.error('Search failed:', error);
+          }
+        }
+      }
+    })
+  })
+})
+
+// Cancel pending search
+export function cancelSearch() {
+  abortController?.abort();
+}
+```
+
+### Real-Time Update Subscription Pattern
+
+Use `onQueryStarted` to establish real-time connections or subscriptions:
+
+```typescript
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    watchMessages: builder.query({
+      query: (roomId) => ({ url: `/messages/${roomId}` }),
+      
+      onQueryStarted: async (roomId, { queryFulfilled }) => {
+        let ws: WebSocket | null = null;
+        
+        try {
+          const { data: initialMessages } = await queryFulfilled;
+          console.log('Initial messages loaded:', initialMessages.length);
+          
+          // Establish WebSocket connection
+          ws = new WebSocket(`wss://api.example.com/messages/${roomId}`);
+          
+          ws.onmessage = (event) => {
+            const newMessage = JSON.parse(event.data);
+            
+            // Update cache with real-time message
+            api.util.updateQueryData('watchMessages', roomId, (draft) => {
+              draft.push(newMessage);
+            });
+          };
+        } catch (error) {
+          console.error('Failed to load messages:', error);
+        } finally {
+          // Cleanup on completion
+          ws?.close();
+        }
+      }
+    })
+  })
+})
+```
+
+### Debouncing/Throttling with `onQueryStarted`
+
+Control request frequency using `onQueryStarted`:
+
+```typescript
+let lastRequestTime = 0;
+const DEBOUNCE_MS = 500;
+
+const api = createApi({
+  baseQuery: myBaseQuery,
+  endpoints: (builder) => ({
+    autoSavePost: builder.mutation({
+      query: (post) => ({ 
+        url: `/posts/${post.id}`, 
+        method: 'PATCH',
+        body: post 
+      }),
+      
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        const now = Date.now();
+        const timeSinceLastRequest = now - lastRequestTime;
+        
+        if (timeSinceLastRequest < DEBOUNCE_MS) {
+          console.log('Request debounced - too frequent');
+          return;
+        }
+        
+        lastRequestTime = now;
+        
+        try {
+          const { data } = await queryFulfilled;
+          console.log('Auto-save successful');
+        } catch (error) {
+          console.error('Auto-save failed:', error);
+        }
+      }
+    })
+  })
+})
+```
+
+### Usage in Components
+
+```tsx
+'use client';
+
+import { useUpdatePostMutation } from './api';
+
+export function EditPostForm({ postId }: { postId: number }) {
+  const [updatePost, { isLoading }] = useUpdatePostMutation();
+  const [title, setTitle] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      // The onQueryStarted hook handles optimistic updates
+      await updatePost({ id: postId, title }) ;
+      console.log('Post updated');
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input 
+        value={title} 
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Post title"
+      />
+      <button disabled={isLoading}>
+        {isLoading ? 'Updating...' : 'Update Post'}
+      </button>
+    </form>
+  );
+}
+```
+
+### Key Benefits
+
+✅ **Optimistic Updates** - Improve perceived performance  
+✅ **Error Recovery** - Automatically revert on failure  
+✅ **Request Coordination** - Synchronize multiple operations  
+✅ **Real-Time Integration** - Connect to WebSocket/SSE  
+✅ **Request Control** - Debounce, throttle, or cancel  
+✅ **Side Effects** - Execute logic at query start time  
+
+### Common Patterns Summary
+
+| Pattern | Use Case | Benefit |
+|---------|----------|---------|
+| **Optimistic Update** | Mutations | Instant UI feedback |
+| **Rollback on Error** | Data modification | User confidence |
+| **Real-Time Sync** | Live data | Current information |
+| **Request Debounce** | Auto-save | Prevent spam requests |
+| **Abort/Cancel** | Search queries | Clean up resources |
+
 ## Sequential Data Dependencies
 
 Implement dependent query patterns where subsequent requests only execute after prerequisite data is loaded, preventing unnecessary network overhead.
+
 
 ### Multi-Step Data Loading
 
