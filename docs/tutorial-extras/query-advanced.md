@@ -786,7 +786,7 @@ The most common pattern: update cache immediately, rollback on error.
 export function UpdateUserEmail() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
-  const { mutate: updateUser } = useUpdateUserMutation()
+  const [updateUser] = useUpdateUserMutation()
   
   const handleSubmit = async () => {
     setLoading(true)
@@ -838,7 +838,7 @@ export function UpdateUserEmailPessimistic() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { mutate: updateUser } = useUpdateUserMutation()
+  const [updateUser] = useUpdateUserMutation()
   
   const handleSubmit = async () => {
     setLoading(true)
@@ -902,7 +902,7 @@ Sometimes you want to undo only specific changes:
 
 ```tsx
 export function ComplexUpdateExample() {
-  const { mutate: updateUser } = useUpdateUserMutation()
+  const [ updateUser ] = useUpdateUserMutation()
   
   const handleUpdate = async (updates: Partial<User>) => {
     // Store original data before update
@@ -1034,41 +1034,6 @@ export function UserProfile({ userId }: { userId: number }) {
 }
 ```
 
-#### Pre-fetching Data Check
-
-```tsx
-export function UsersList() {
-  const { data: users } = useGetUsersQuery()
-
-  const handlePrefetchUser = async (userId: number) => {
-    // Check if user data is already cached
-    const cached = api.utils.getApiDraftData('getUser', { id: userId })
-    
-    if (cached) {
-      // Data is already cached, no need to fetch
-      console.log('Data already available:', cached)
-      return
-    }
-    
-    // Data not cached, trigger a fetch
-    await api.endpoints.getUser.initiate({ id: userId })
-  }
-
-  return (
-    <div>
-      {users?.map(user => (
-        <button
-          key={user.id}
-          onClick={() => handlePrefetchUser(user.id)}
-        >
-          Load {user.name}
-        </button>
-      ))}
-    </div>
-  )
-}
-```
-
 #### Bulk Cache Operations
 
 Transform entire cached datasets with complex logic:
@@ -1120,7 +1085,7 @@ api.utils.invalidateTags(tags?: (string | {type: string; id?: string | number})[
 ```tsx
 export function CreateUserForm() {
   const [name, setName] = useState('')
-  const { mutate: createUser } = useCreateUserMutation()
+  const [createUser] = useCreateUserMutation()
 
   const handleSubmit = async () => {
     try {
@@ -1156,7 +1121,7 @@ export function CreateUserForm() {
 
 ```tsx
 export function DeleteUserButton({ userId }: { userId: number }) {
-  const { mutate: deleteUser } = useDeleteUserMutation()
+  const [deleteUser ] = useDeleteUserMutation()
 
   const handleDelete = async () => {
     try {
@@ -1180,7 +1145,7 @@ export function DeleteUserButton({ userId }: { userId: number }) {
 
 ```tsx
 export function TransferOwnershipForm() {
-  const { mutate: transferOwnership } = useTransferOwnershipMutation()
+  const [transferOwnership] = useTransferOwnershipMutation()
 
   const handleTransfer = async (postId: number, newOwnerId: number) => {
     try {
@@ -1380,7 +1345,7 @@ These utilities work together for powerful cache management patterns:
 
 ```tsx
 export function ComplexMutationFlow() {
-  const { mutate: createPost } = useCreatePostMutation()
+  const [createPost]= useCreatePostMutation()
 
   const handleCreatePost = async (title: string, content: string) => {
     try {
